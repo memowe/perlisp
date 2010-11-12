@@ -16,6 +16,11 @@ sub next_token {
     return shift @{$self->tokens};
 }
 
+sub look_ahead {
+    my $self = shift;
+    return $self->tokens->[0];
+}
+
 sub to_string {
     my $self    = shift;
     my @strings = map { $_->to_string } @{$self->tokens};
