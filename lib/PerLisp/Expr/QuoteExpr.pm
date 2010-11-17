@@ -6,6 +6,11 @@ use warnings;
 
 __PACKAGE__->attr('expr');
 
+sub eval {
+    my ($self, $context) = @_;
+    return $self->expr;
+}
+
 sub to_string {
     my $self = shift;
     return $self->expr->to_string;

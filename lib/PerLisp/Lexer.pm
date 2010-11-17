@@ -20,13 +20,13 @@ sub lex {
 
         # opening brace
         $string =~ s/^\( ?// and do {
-            $tokens->add(PerLisp::Token->new(name => 'LIST_START'));
+            $tokens->add(PerLisp::Token->new(name => 'CALL_START'));
             next; 
         };
 
         # closing brace
         $string =~ s/^\) ?// and do {
-            $tokens->add(PerLisp::Token->new(name => 'LIST_END'));
+            $tokens->add(PerLisp::Token->new(name => 'CALL_END'));
             next;
         };
 

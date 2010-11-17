@@ -6,9 +6,14 @@ use warnings;
 
 __PACKAGE__->attr('value');
 
+sub eval {
+    my ($self, $context) = @_;
+    return $self;
+}
+
 sub to_string {
     my $self = shift;
-    return '"' . $self->value . '"';
+    return '"' . $self->value . '"' . "\n";
 }
 
 sub to_simple {

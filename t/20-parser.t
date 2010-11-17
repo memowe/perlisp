@@ -19,29 +19,29 @@ sub parse {
 
 # simple expressions
 isa_ok(parse('42'), 'PerLisp::Expr::Number', 'parsed number');
-is(parse('42')->to_string, '42', 'right Number');
+is(parse('42')->to_string, "42\n", 'right Number');
 
 isa_ok(parse('"Hi"'), 'PerLisp::Expr::String', 'parsed string');
-is(parse('"Hi"')->to_string, '"Hi"', 'right String');
+is(parse('"Hi"')->to_string, "\"Hi\"\n", 'right String');
 
 isa_ok(parse('hØ'), 'PerLisp::Expr::Symbol', 'parsed symbol');
-is(parse('hØ')->to_string, 'hØ', 'right Symbol');
+is(parse('hØ')->to_string, "hØ\n", 'right Symbol');
 
 # "complex" expression
 my $tree = parse('(a "b" 42)');
-isa_ok($tree, 'PerLisp::Expr::List', 'parsed list');
+isa_ok($tree, 'PerLisp::Expr::Call', 'parsed a call');
 my @exprs = @{$tree->exprs};
-isa_ok($exprs[0], 'PerLisp::Expr::Symbol', 'first parsed list elem');
-isa_ok($exprs[1], 'PerLisp::Expr::String', 'second parsed list elem');
-isa_ok($exprs[2], 'PerLisp::Expr::Number', 'third parsed list elem');
-is_deeply($tree->to_simple, [qw(a "b" 42)], 'right List');
-is($tree->to_string, '(a "b" 42)', 'right List stringification');
+isa_ok($exprs[0], 'PerLisp::Expr::Symbol', 'first parsed call elem');
+isa_ok($exprs[1], 'PerLisp::Expr::String', 'second parsed call elem');
+isa_ok($exprs[2], 'PerLisp::Expr::Number', 'third parsed call elem');
+is_deeply($tree->to_simple, [qw(a "b" 42)], 'right Call');
+is($tree->to_string, '(a "b" 42)', 'right Call stringification');
 
 # quoted "complex" expression
 $tree = parse('\'(a "b" 42)');
-isa_ok($tree, 'PerLisp::Expr::QuoteExpr', 'parsed quoted list');
-is_deeply($tree->to_simple, {quoted => [qw(a "b" 42)]}, 'right \'List');
-is($tree->to_string, '(a "b" 42)', 'right \'List stringification');
+isa_ok($tree, 'PerLisp::Expr::QuoteExpr', 'parsed quoted call');
+is_deeply($tree->to_simple, {quoted => [qw(a "b" 42)]}, 'right \'Call');
+is($tree->to_string, '(a "b" 42)', 'right \'Call stringification');
 
 # complex expression
 $tree = parse("
@@ -49,7 +49,7 @@ $tree = parse("
         (cond (= n 0) 1
             (* n (fak (- n 1)))))
 "),
-isa_ok($tree, 'PerLisp::Expr::List', 'parsed complex expression');
+isa_ok($tree, 'PerLisp::Expr::Call', 'parsed complex expression');
 is_deeply(
     $tree->to_simple,
     ['defin', [qw(fak n)], ['cond', [qw(= n 0)], 1,

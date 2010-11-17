@@ -9,7 +9,7 @@ use PerLisp::Expr::Number;
 use PerLisp::Expr::String;
 use PerLisp::Expr::Symbol;
 use PerLisp::Expr::QuoteExpr;
-use PerLisp::Expr::List;
+use PerLisp::Expr::Call;
 
 sub parse {
     my ($self, $tokens) = @_;
@@ -31,8 +31,8 @@ sub expr {
         # quoted expression
         return $self->quote($tokens) when 'QUOTE';
 
-        #list
-        return $self->list($tokens)  when 'LIST_START';
+        # call
+        return $self->call($tokens)  when 'CALL_START';
 
         # parser error
         default {
@@ -70,16 +70,16 @@ sub quote {
     );
 }
 
-sub list {
+sub call {
     my ($self, $tokens) = @_;
 
     # scan till end of list
     my @exprs = ();
-    while ($tokens->look_ahead->name ne 'LIST_END') {
+    while ($tokens->look_ahead->name ne 'CALL_END') {
         push @exprs, $self->expr($tokens);
     }
-    $tokens->next_token; # consume LIST_END
-    return PerLisp::Expr::List->new(exprs => \@exprs);
+    $tokens->next_token; # consume CALL_END
+    return PerLisp::Expr::Call->new(exprs => \@exprs);
 }
 
 1;
