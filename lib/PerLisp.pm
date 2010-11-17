@@ -34,9 +34,9 @@ sub init {
         code => sub {
             die "bind needs exactly two arguments.\n" unless @_ == 2;
             my ($symbol, $expr) = @_;
-            $self->context->set(
-                $symbol->name => $expr->eval($self->context),
-            );
+            my $value = $expr->eval($self->context);
+            $self->context->set($symbol->name => $value);
+            return $value;
         },
     ));
 
@@ -46,8 +46,20 @@ sub init {
         code => sub {
             my ($car_expr, $cdr_expr) = @_;
             my $list = PerLisp::Expr::List->new;
-            $list->car($car_expr->eval($self->context)) if $car_expr;
-            $list->cdr($cdr_expr->eval($self->context)) if $cdr_expr;
+
+            if ($car_expr) {
+                my $car = $car_expr->eval($self->context);
+                die "car can't be a list.\n"
+                    if $car->isa('PerLisp::Expr::List');
+                $list->car($car);
+                
+                if ($cdr_expr) {
+                    my $cdr = $cdr_expr->eval($self->context);
+                    die "cdr must be a list.\n"
+                        unless $cdr->isa('PerLisp::Expr::List');
+                    $list->cdr($cdr);
+                }
+            }
             return $list;
         },
     ));
@@ -93,6 +105,7 @@ sub eval {
 
 sub read_eval_print_loop {
     my $self = shift;
+    $self->init;
 
     # read until EOD
     while (defined( my $line = $self->input->getline )) {
