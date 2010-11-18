@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 5;
+use Test::More tests => 7;
 
 use PerLisp;
 
@@ -21,5 +21,11 @@ is_deeply($fun->context, $pl->context, 'right context');
 $pl->context->set(pair => $fun);
 my $val = $pl->eval('(pair 3)');
 is_deeply($val->to_simple, [3, 3], 'application simplification');
+
+# define test
+$pl->eval('(define (paar x) (list x x))');
+$fun = $pl->context->get('paar');
+isa_ok($fun, 'PerLisp::Expr::Function', '"define"d function');
+is_deeply($pl->eval('(paar 6)')->to_simple, [6, 6], 'simplification');
 
 __END__

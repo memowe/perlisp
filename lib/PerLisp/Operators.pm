@@ -1,5 +1,5 @@
 package PerLisp::Operators;
-# not a class!
+# not a class but a package
 
 use strict;
 use warnings;
@@ -106,6 +106,23 @@ sub lambda { # eval nothing
         body    => $body,
         context => $context,
     );
+}
+
+sub define { # eval nothing
+    my ($context, $call_list, $body) = @_;
+    
+    # preparations
+    my $symbol     = $call_list->car;
+    my $param_list = $call_list->cdr;
+
+    # construct the function
+    my $function = lambda($context, $param_list, $body);
+
+    # bind (perl has a built-in bind)
+    PerLisp::Operators::bind($context, $symbol, $function);
+
+    # return the function
+    return $function;
 }
 
 1;

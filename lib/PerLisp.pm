@@ -29,7 +29,7 @@ sub init {
     my $self = shift;
 
     # load operators from PerLisp::Operators;
-    foreach my $op_name (qw(bind cons list car cdr lambda)) {
+    foreach my $op_name (qw(bind cons list car cdr lambda define)) {
 
         # here may be dragons
         no strict 'refs';
