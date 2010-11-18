@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 21;
+use Test::More tests => 24;
 
 use PerLisp;
 
@@ -48,5 +48,17 @@ my $cddr = $pl->eval('(cdr (cdr bar))');
 isa_ok($cddr, 'PerLisp::Expr::List', 'two element list cdr cdr');
 ok(! defined $cddr->to_simple, 'two element list cdr cdr simplification');
 is($cddr->to_string, "()\n", 'two element list cdr cdr stringification');
+
+# quoted lists
+$pl->eval("(bind qfoo '())");
+$list = $pl->eval('qfoo');
+isa_ok($list, 'PerLisp::Expr::List', 'quoted empty list');
+ok(! defined $list->to_simple, 'quoted empty list simplification');
+$list = $pl->eval("'(foo bar (baz quux) 42)");
+is_deeply(
+    $list->to_simple,
+    ['foo', 'bar', [qw(baz quux)], '42'],
+    'complex quoted list simplification',
+);
 
 __END__
