@@ -14,7 +14,7 @@ sub eval {
 
 sub to_string {
     my $self = shift;
-    return 'Operator[' . $self->name . "]\n";
+    return 'Operator[' . $self->name . ']';
 }
 
 sub to_simple {

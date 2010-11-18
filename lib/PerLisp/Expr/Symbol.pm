@@ -13,7 +13,7 @@ sub eval {
 
 sub to_string {
     my $self = shift;
-    return $self->name . "\n";
+    return $self->name;
 }
 
 sub to_simple {

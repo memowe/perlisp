@@ -23,7 +23,7 @@ is_deeply(
 foreach my $operator (@operators) {
     is(
         $pl->context->get($operator)->to_string,
-        "Operator[$operator]\n",
+        "Operator[$operator]",
         "right operator $operator stringification",
     );
 }

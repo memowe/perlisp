@@ -118,7 +118,7 @@ sub read_eval_print_loop {
         # try to eval and print
         eval {
             my $value = $self->eval($line, $self->context);
-            $self->output->print($value->to_string);
+            $self->output->print($value->to_string . "\n");
         };
 
         # catch errors

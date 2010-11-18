@@ -43,8 +43,7 @@ sub eval {
 sub to_string {
     my $self = shift;
     my @expr_strings = map { $_->to_string } @{$self->exprs};
-    chomp for @expr_strings;
-    return '(' . join(' ' => @expr_strings) . ")\n";
+    return '(' . join(' ' => @expr_strings) . ')';
 }
 
 sub to_simple {
