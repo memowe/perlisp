@@ -1,4 +1,3 @@
-- lambda
 - define
 - let
 - Helper file: cadr caddr cddr ... map, filter, reduce + tests
