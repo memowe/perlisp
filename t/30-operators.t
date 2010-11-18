@@ -3,14 +3,14 @@
 use strict;
 use warnings;
 
-use Test::More tests => 6;
+use Test::More 'no_plan';
 
 use_ok('PerLisp');
 
 my $pl = PerLisp->new;
 $pl->init;
 
-my @operators = qw(bind cons car cdr);
+my @operators = qw(bind cons list car cdr);
 
 # all operators bound
 is_deeply(

@@ -48,10 +48,7 @@ sub init {
             my $list = PerLisp::Expr::List->new;
 
             if ($car_expr) {
-                my $car = $car_expr->eval($self->context);
-                die "car can't be a list.\n"
-                    if $car->isa('PerLisp::Expr::List');
-                push @{$list->exprs}, $car;
+                push @{$list->exprs}, $car_expr->eval($self->context);
                 
                 if ($cdr_expr) {
                     my $cdr = $cdr_expr->eval($self->context);
@@ -61,6 +58,18 @@ sub init {
                 }
             }
             return $list;
+        },
+    ));
+
+    # list (eval all arguments)
+    $self->context->set(list => PerLisp::Expr::Operator->new(
+        name => 'list',
+        code => sub {
+            my @elm_exprs = @_;
+            my @exprs = map { $_->eval($self->context) } @elm_exprs;
+            return PerLisp::Expr::List->new(
+                exprs => \@exprs,
+            );
         },
     ));
 
