@@ -87,6 +87,8 @@ sub init {
             return $list->cdr;
         },
     ));
+
+    # lambda TODO
 }
 
 sub eval {
@@ -110,11 +112,20 @@ sub read_eval_print_loop {
     # read until EOD
     while (defined( my $line = $self->input->getline )) {
 
-        # eval
-        my $value = $self->eval($line, $self->context);
+        # quit
+        last if $line =~ /^(q(uit)?|bye|die|eod)$/i;
 
-        # print
-        $self->output->print($value->to_string);
+        # try to eval and print
+        eval {
+            my $value = $self->eval($line, $self->context);
+            $self->output->print($value->to_string);
+        };
+
+        # catch errors
+        if ($@) {
+            my $msg = $@;
+            $self->output->print("Error: $msg");
+        }
     }
 }
 
