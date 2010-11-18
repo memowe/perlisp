@@ -23,8 +23,8 @@ sub to_simple {
 }
 
 sub apply {
-    my ($self, $args) = @_;
-    return $self->code->(@$args);
+    my ($self, $context, $args) = @_;
+    return $self->code->($context, @$args);
 }
 
 1;

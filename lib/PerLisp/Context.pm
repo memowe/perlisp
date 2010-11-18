@@ -4,63 +4,40 @@ use base 'PerLisp::Base';
 use strict;
 use warnings;
 
-__PACKAGE__->attr(stack => sub { [{}] });
-
-# return top hashref of the stack
-sub _binds {
-    my $self = shift;
-    return $self->stack->[-1];
-}
-sub to_hash { shift->_binds }
+__PACKAGE__->attr(binds => sub { {} });
 
 sub get {
     my ($self, $name) = @_;
 
     die "Couldn't find $name in context.\n"
-        unless exists $self->_binds->{$name};
+        unless exists $self->binds->{$name};
 
-    return $self->_binds->{$name};
+    return $self->binds->{$name};
 }
 
 sub set {
     my ($self, $name, $value) = @_;
 
     die "Symbol $name already bound.\n"
-        if exists $self->_binds->{$name};
+        if exists $self->binds->{$name};
 
-    $self->_binds->{$name} = $value;
+    $self->binds->{$name} = $value;
 }
 
-sub push {
+# returns a new context with old and new bindings
+sub specialize {
     my ($self, $new) = @_;
 
-    # copy
-    my %binds = %{$self->_binds};
-
-    # push
-    push @{$self->stack}, \%binds;
+    # clone
+    my %binds = %{$self->binds};
 
     # merge
-    while ( my ($name, $expr) = each %$new ) {
-        $self->set($name => $expr);
-    }
-}
+    $binds{$_} = $new->{$_} for keys %$new;
 
-sub pop {
-    my $self = shift;
-
-    die "Couldn't pop: context stack height is 1.\n"
-        if @{$self->stack} == 1;
-
-    return pop @{$self->stack};
-}
-
-sub to_string {
-    my $self = shift;
-
-    return join '' => map {
-        "$_ => " . $self->_binds->{$_}->to_string
-    } sort keys %{$self->_binds};
+    # create a new context
+    return PerLisp::Context->new(
+        binds => \%binds,
+    );
 }
 
 1;

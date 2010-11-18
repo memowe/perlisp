@@ -1,6 +1,6 @@
-- Tests für ' statt cons
 - lambda
-- list
-- cadr caddr cddr ...
+- define
+- let
+- Helper file: cadr caddr cddr ... map, filter, reduce + tests
 - (load "filename.lisp")
 - $ repl.pl filename.lisp

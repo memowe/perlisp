@@ -21,9 +21,8 @@ sub cdr {
 sub eval {
     my ($self, $context) = @_;
 
-    # copy exprs
-    my @exprs = @{$self->exprs};
-    return unless @exprs; # empty list
+    # empty list
+    return unless @{$self->exprs};
 
     # get function expression and arguments
     my $fn_expr = $self->car;
@@ -37,7 +36,7 @@ sub eval {
         unless $function->can('apply');
 
     # apply
-    return $function->apply(\@args);
+    return $function->apply($context, \@args);
 }
 
 sub to_string {

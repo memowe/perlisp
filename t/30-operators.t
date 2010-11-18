@@ -10,11 +10,11 @@ use_ok('PerLisp');
 my $pl = PerLisp->new;
 $pl->init;
 
-my @operators = qw(bind cons list car cdr);
+my @operators = qw(bind cons list car cdr lambda);
 
 # all operators bound
 is_deeply(
-    [ sort keys %{$pl->context->to_hash} ],
+    [ sort keys %{$pl->context->binds} ],
     [ sort @operators ],
     'bound right operators',
 );

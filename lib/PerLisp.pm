@@ -10,8 +10,9 @@ use IO::Handle;
 use PerLisp::Lexer;
 use PerLisp::Parser;
 use PerLisp::Context;
-use PerLisp::Expr::Operator;
 use PerLisp::Expr::List;
+use PerLisp::Expr::Operator;
+use PerLisp::Expr::Function;
 
 # RE tools
 __PACKAGE__->attr(lexer  => sub { PerLisp::Lexer->new });
@@ -32,10 +33,11 @@ sub init {
     $self->context->set(bind => PerLisp::Expr::Operator->new(
         name => 'bind',
         code => sub {
+            my $context = shift;
             die "bind needs exactly two arguments.\n" unless @_ == 2;
             my ($symbol, $expr) = @_;
-            my $value = $expr->eval($self->context);
-            $self->context->set($symbol->name => $value);
+            my $value = $expr->eval($context);
+            $context->set($symbol->name => $value);
             return $value;
         },
     ));
@@ -44,14 +46,14 @@ sub init {
     $self->context->set(cons => PerLisp::Expr::Operator->new(
         name => 'cons',
         code => sub {
-            my ($car_expr, $cdr_expr) = @_;
+            my ($context, $car_expr, $cdr_expr) = @_;
             my $list = PerLisp::Expr::List->new;
 
             if ($car_expr) {
-                push @{$list->exprs}, $car_expr->eval($self->context);
+                push @{$list->exprs}, $car_expr->eval($context);
                 
                 if ($cdr_expr) {
-                    my $cdr = $cdr_expr->eval($self->context);
+                    my $cdr = $cdr_expr->eval($context);
                     die "cdr must be a list.\n"
                         unless $cdr->isa('PerLisp::Expr::List');
                     push @{$list->exprs}, @{$cdr->exprs};
@@ -65,8 +67,8 @@ sub init {
     $self->context->set(list => PerLisp::Expr::Operator->new(
         name => 'list',
         code => sub {
-            my @elm_exprs = @_;
-            my @exprs = map { $_->eval($self->context) } @elm_exprs;
+            my ($context, @elm_exprs) = @_;
+            my @exprs = map { $_->eval($context) } @elm_exprs;
             return PerLisp::Expr::List->new(
                 exprs => \@exprs,
             );
@@ -77,9 +79,9 @@ sub init {
     $self->context->set(car => PerLisp::Expr::Operator->new(
         name => 'car',
         code => sub {
-            my $list_expr = shift;
-            my $list = $list_expr->eval($self->context);
-            die 'car can\'t be applied on non list ' . $list->to_string
+            my ($context, $list_expr) = @_;
+            my $list = $list_expr->eval($context);
+            die 'car can\'t be applied on non list ' . $list->to_string . "\n"
                 unless $list->isa('PerLisp::Expr::List');
             return $list->car;
         },
@@ -89,15 +91,35 @@ sub init {
     $self->context->set(cdr => PerLisp::Expr::Operator->new(
         name => 'cdr',
         code => sub {
-            my $list_expr = shift;
-            my $list = $list_expr->eval($self->context);
+            my ($context, $list_expr) = @_;
+            my $list = $list_expr->eval($context);
             die 'cdr can\'t be applied on non list ' . $list->to_string
                 unless $list->isa('PerLisp::Expr::List');
             return $list->cdr;
         },
     ));
 
-    # lambda TODO
+    # lambda (eval nothing)
+    $self->context->set(lambda => PerLisp::Expr::Operator->new(
+        name => 'lambda',
+        code => sub {
+            my ($context, $param_list, $body) = @_;
+            die "lambda needs a parameter list.\n"
+                unless $param_list->isa('PerLisp::Expr::List');
+            my @param_names;
+            foreach my $expr (@{$param_list->exprs}) {
+                die 'only symbols allowed in parameter lists: '
+                    . $expr->to_string . "\n"
+                    unless $expr->isa('PerLisp::Expr::Symbol');
+                push @param_names, $expr->name;
+            }
+            return PerLisp::Expr::Function->new(
+                params  => \@param_names,
+                body    => $body,
+                context => $context,
+            );
+        },
+    ));
 }
 
 sub eval {
