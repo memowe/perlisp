@@ -75,7 +75,7 @@ sub call {
 
     # scan till end of list
     my @exprs = ();
-    while ($tokens->look_ahead->name ne 'CALL_END') {
+    while ($tokens->look_ahead and $tokens->look_ahead->name ne 'CALL_END') {
         push @exprs, $self->expr($tokens);
     }
     $tokens->next_token; # consume CALL_END
