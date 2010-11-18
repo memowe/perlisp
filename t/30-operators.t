@@ -10,7 +10,10 @@ use_ok('PerLisp');
 my $pl = PerLisp->new;
 $pl->init;
 
-my @operators = qw(bind cons list car cdr lambda define);
+my @operators = qw(
+    bind cons list car cdr lambda define
+    + - * / ^ %
+);
 
 # all operators bound
 is_deeply(

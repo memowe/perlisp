@@ -1,5 +1,5 @@
 - more lambda tests (closures!)
-- operator arithmetic
+- tests (nil? ...)
 - Helper file: cadr caddr cddr ... map, filter, reduce + tests
 - (load "filename.lisp")
 - $ repl.pl filename.lisp

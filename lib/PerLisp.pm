@@ -8,6 +8,7 @@ use warnings;
 
 use IO::Handle;
 use PerLisp::Operators;
+use PerLisp::Operators::Arithmetic;
 use PerLisp::Lexer;
 use PerLisp::Parser;
 use PerLisp::Context;
@@ -28,20 +29,38 @@ __PACKAGE__->attr(context => sub { PerLisp::Context->new });
 sub init {
     my $self = shift;
 
-    # load operators from PerLisp::Operators;
-    foreach my $op_name (qw(bind cons list car cdr lambda define)) {
+    # here may be dragons
+    no strict 'refs';
 
-        # here may be dragons
-        no strict 'refs';
+    # load basic operators
+    foreach my $op_name (qw(bind cons list car cdr lambda define)) {
 
         # redirect
         my $operator = PerLisp::Expr::Operator->new(
             name => $op_name,
-            code => sub { *{"PerLisp::Operators::$op_name"}->(@_) },
+            code => sub {
+                *{"PerLisp::Operators::$op_name"}->(@_)
+            },
         );
 
         # save to context
         $self->context->set($op_name => $operator);
+    }
+
+    # load arithmetic operators
+    foreach my $op_name (qw(plus minus mult div pow mod)) {
+
+        # redirect
+        my $short_name = $PerLisp::Operators::Arithmetic::short_name{$op_name};
+        my $operator = PerLisp::Expr::Operator->new(
+            name => $short_name,
+            code => sub {
+                *{"PerLisp::Operators::Arithmetic::$op_name"}->(@_)
+            },
+        );
+
+        # save to context
+        $self->context->set($short_name => $operator);
     }
 }
 
