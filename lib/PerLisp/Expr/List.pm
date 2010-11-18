@@ -4,38 +4,53 @@ use base 'PerLisp::Expr';
 use strict;
 use warnings;
 
-__PACKAGE__->attr('car');
-__PACKAGE__->attr(cdr => sub { PerLisp::Expr::List->new });
+__PACKAGE__->attr(exprs => sub { [] });
+
+sub car {
+    my $self = shift;
+    return $self->exprs->[0];
+}
+
+sub cdr {
+    my $self  = shift;
+    my @exprs = @{$self->exprs};
+    shift @exprs; # drop the car
+    return PerLisp::Expr::List->new(exprs => \@exprs);
+}
 
 sub eval {
     my ($self, $context) = @_;
-    return $self;
+
+    # copy exprs
+    my @exprs = @{$self->exprs};
+    return unless @exprs; # empty list
+
+    # get function expression and arguments
+    my $fn_expr = $self->car;
+    my @args    = @{$self->cdr->exprs};
+
+    # eval function expression
+    my $function = $fn_expr->eval($context);
+
+    # check applyability (duck typing)
+    die $fn_expr->to_string . " can't be applied.\n"
+        unless $function->can('apply');
+
+    # apply
+    return $function->apply(\@args);
 }
 
 sub to_string {
     my $self = shift;
-
-    # empty list
-    return "()\n" unless defined $self->car;
-
-    # list has at least one element
-    my $car = $self->car->to_string;
-    my $cdr = $self->cdr->to_string;
-    chomp for $car, $cdr;
-    return "($car $cdr)\n";
+    my @expr_strings = map { $_->to_string } @{$self->exprs};
+    chomp for @expr_strings;
+    return '(' . join(' ' => @expr_strings) . ")\n";
 }
 
 sub to_simple {
     my $self = shift;
-
-    # empty list
-    return undef unless defined $self->car;
-
-    # list has at least one element
-    return {
-        car => $self->car->to_simple,
-        cdr => $self->cdr->to_simple
-    };
+    return unless @{$self->exprs};
+    return [ map { $_->to_simple } @{$self->exprs} ];
 }
 
 1;

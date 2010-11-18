@@ -51,13 +51,13 @@ sub init {
                 my $car = $car_expr->eval($self->context);
                 die "car can't be a list.\n"
                     if $car->isa('PerLisp::Expr::List');
-                $list->car($car);
+                push @{$list->exprs}, $car;
                 
                 if ($cdr_expr) {
                     my $cdr = $cdr_expr->eval($self->context);
                     die "cdr must be a list.\n"
                         unless $cdr->isa('PerLisp::Expr::List');
-                    $list->cdr($cdr);
+                    push @{$list->exprs}, @{$cdr->exprs};
                 }
             }
             return $list;

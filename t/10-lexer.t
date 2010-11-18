@@ -14,8 +14,8 @@ sub lex {
 }
 
 # simple tokens
-is(lex('('), "CALL_START\n", 'CALL_START');
-is(lex(')'), "CALL_END\n", 'CALL_END');
+is(lex('('), "LIST_START\n", 'LIST_START');
+is(lex(')'), "LIST_END\n", 'LIST_END');
 is(lex("'"), "QUOTE\n", 'QUOTE');
 
 # tokens with attributes
@@ -26,7 +26,7 @@ is(lex('ÄBCDEFG_HI'), "SYMBOL(ÄBCDEFG_HI)\n", 'SYMBOL');
 # complex token streams
 is(
     lex("\n\n(   bind\n a \"a\"   )   \n "),
-    "CALL_START\nSYMBOL(bind)\nSYMBOL(a)\nSTRING(a)\nCALL_END\n",
+    "LIST_START\nSYMBOL(bind)\nSYMBOL(a)\nSTRING(a)\nLIST_END\n",
     '(bind a "a")',
 );
 is(
@@ -35,19 +35,19 @@ is(
             (cond (= n 0) 1
                 (* n (fak (- n 1)))))
     "),
-    "CALL_START\nSYMBOL(defin)\nCALL_START\nSYMBOL(fak)\nSYMBOL(n)\n"
-    . "CALL_END\nCALL_START\nSYMBOL(cond)\nCALL_START\nSYMBOL(=)\nSYMBOL(n)\n"
-    . "NUMBER(0)\nCALL_END\nNUMBER(1)\nCALL_START\nSYMBOL(*)\nSYMBOL(n)\n"
-    . "CALL_START\nSYMBOL(fak)\nCALL_START\nSYMBOL(-)\nSYMBOL(n)\nNUMBER(1)\n"
-    . "CALL_END\nCALL_END\nCALL_END\nCALL_END\nCALL_END\n",
+    "LIST_START\nSYMBOL(defin)\nLIST_START\nSYMBOL(fak)\nSYMBOL(n)\n"
+    . "LIST_END\nLIST_START\nSYMBOL(cond)\nLIST_START\nSYMBOL(=)\nSYMBOL(n)\n"
+    . "NUMBER(0)\nLIST_END\nNUMBER(1)\nLIST_START\nSYMBOL(*)\nSYMBOL(n)\n"
+    . "LIST_START\nSYMBOL(fak)\nLIST_START\nSYMBOL(-)\nSYMBOL(n)\nNUMBER(1)\n"
+    . "LIST_END\nLIST_END\nLIST_END\nLIST_END\nLIST_END\n",
     'factorial',
 );
 
 # bullshit
 is(
     lex("))) bÜll \"s)\"it(   )"),
-    "CALL_END\nCALL_END\nCALL_END\nSYMBOL(bÜll)\nSTRING(s))\n"
-    . "SYMBOL(it)\nCALL_START\nCALL_END\n",
+    "LIST_END\nLIST_END\nLIST_END\nSYMBOL(bÜll)\nSTRING(s))\n"
+    . "SYMBOL(it)\nLIST_START\nLIST_END\n",
     'bullshit',
 );
 

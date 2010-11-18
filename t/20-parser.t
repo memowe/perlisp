@@ -29,19 +29,19 @@ is(parse('hØ')->to_string, "hØ\n", 'right Symbol');
 
 # "complex" expression
 my $tree = parse('(a "b" 42)');
-isa_ok($tree, 'PerLisp::Expr::Call', 'parsed a call');
+isa_ok($tree, 'PerLisp::Expr::List', 'parsed a list');
 my @exprs = @{$tree->exprs};
-isa_ok($exprs[0], 'PerLisp::Expr::Symbol', 'first parsed call elem');
-isa_ok($exprs[1], 'PerLisp::Expr::String', 'second parsed call elem');
-isa_ok($exprs[2], 'PerLisp::Expr::Number', 'third parsed call elem');
-is_deeply($tree->to_simple, [qw(a "b" 42)], 'right Call');
-is($tree->to_string, '(a "b" 42)', 'right Call stringification');
+isa_ok($exprs[0], 'PerLisp::Expr::Symbol', 'first parsed list elem');
+isa_ok($exprs[1], 'PerLisp::Expr::String', 'second parsed list elem');
+isa_ok($exprs[2], 'PerLisp::Expr::Number', 'third parsed list elem');
+is_deeply($tree->to_simple, [qw(a "b" 42)], 'right List');
+is($tree->to_string, "(a \"b\" 42)\n", 'right List stringification');
 
 # quoted "complex" expression
 $tree = parse('\'(a "b" 42)');
-isa_ok($tree, 'PerLisp::Expr::QuoteExpr', 'parsed quoted call');
-is_deeply($tree->to_simple, {quoted => [qw(a "b" 42)]}, 'right \'Call');
-is($tree->to_string, '(a "b" 42)', 'right \'Call stringification');
+isa_ok($tree, 'PerLisp::Expr::QuoteExpr', 'parsed quoted list');
+is_deeply($tree->to_simple, {quoted => [qw(a "b" 42)]}, 'right \'List');
+is($tree->to_string, "(a \"b\" 42)\n", 'right \'List stringification');
 
 # complex expression
 $tree = parse("
@@ -49,7 +49,7 @@ $tree = parse("
         (cond (= n 0) 1
             (* n (fak (- n 1)))))
 "),
-isa_ok($tree, 'PerLisp::Expr::Call', 'parsed complex expression');
+isa_ok($tree, 'PerLisp::Expr::List', 'parsed complex expression');
 is_deeply(
     $tree->to_simple,
     ['defin', [qw(fak n)], ['cond', [qw(= n 0)], 1,
@@ -59,7 +59,7 @@ is_deeply(
 );
 is(
     $tree->to_string,
-    '(defin (fak n) (cond (= n 0) 1 (* n (fak (- n 1)))))',
+    "(defin (fak n) (cond (= n 0) 1 (* n (fak (- n 1)))))\n",
     'right parsed complex expression stringification'
 );
 
