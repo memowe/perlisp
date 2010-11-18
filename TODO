@@ -1,1 +1,6 @@
 - Tests für ' statt cons
+- lambda
+- list
+- cadr caddr cddr ...
+- (load "filename.lisp")
+- $ repl.pl filename.lisp
