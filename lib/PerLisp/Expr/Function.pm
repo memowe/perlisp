@@ -39,6 +39,9 @@ sub apply {
     my %binds;
     $binds{$_} = shift @$args for @{$self->params};
 
+    # static scope
+    $context = $self->context;
+
     # specialize context
     my $local_context = $context->specialize(\%binds);
 
