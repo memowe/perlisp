@@ -1,12 +1,10 @@
-- cond
-- nil, eq
-- and, or, not
+- cond, nil, equal, logical_and, logical_or, logical_not tests
 - Helper file:
-    - cadr caddr cddr ...
+    - cadr caddr cddr ... !=
     - map
     - filter
     - reduce
     - sort
-    - nil? = != neq
 - (load "filename.lisp")
 - $ repl.pl filename.lisp
+- equalness of quoted expressions?

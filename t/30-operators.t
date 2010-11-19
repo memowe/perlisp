@@ -11,7 +11,11 @@ my $pl = PerLisp->new;
 $pl->init;
 
 my @operators = qw(
-    bind cons list car cdr lambda define
+    bind
+    cons list car cdr
+    lambda define
+    cond nil? =
+    and or not
     + - * / ^ %
 );
 

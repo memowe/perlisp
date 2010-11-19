@@ -33,34 +33,47 @@ sub init {
     no strict 'refs';
 
     # load basic operators
-    foreach my $op_name (qw(bind cons list car cdr lambda define)) {
+    my @long_names = qw(
+        bind_name
+        cons list car cdr
+        lambda define
+        cond is_nil equal
+        logical_and logical_or logical_not
+    );
+    my %short_name = %PerLisp::Operators::short_name;
+    foreach my $name (@long_names) {
 
         # redirect
+        my $short    = $short_name{$name};
         my $operator = PerLisp::Expr::Operator->new(
-            name => $op_name,
+            name => $short,
             code => sub {
-                *{"PerLisp::Operators::$op_name"}->(@_)
+                *{"PerLisp::Operators::$name"}->(@_)
             },
         );
 
         # save to context
-        $self->context->set($op_name => $operator);
+        $self->context->set($short => $operator);
     }
 
     # load arithmetic operators
-    foreach my $op_name (qw(plus minus mult div pow mod)) {
+    @long_names = qw(
+        plus minus mult div pow mod
+    );
+    %short_name = %PerLisp::Operators::Arithmetic::short_name;
+    foreach my $name (@long_names) {
 
         # redirect
-        my $short_name = $PerLisp::Operators::Arithmetic::short_name{$op_name};
+        my $short    = $short_name{$name};
         my $operator = PerLisp::Expr::Operator->new(
-            name => $short_name,
+            name => $short,
             code => sub {
-                *{"PerLisp::Operators::Arithmetic::$op_name"}->(@_)
+                *{"PerLisp::Operators::Arithmetic::$name"}->(@_)
             },
         );
 
         # save to context
-        $self->context->set($short_name => $operator);
+        $self->context->set($short => $operator);
     }
 }
 
