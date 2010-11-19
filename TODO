@@ -1,6 +1,12 @@
 - cond
-- let
-- tests (nil? ...)
-- Helper file: cadr caddr cddr ... map, filter, reduce + tests
+- nil, eq
+- and, or, not
+- Helper file:
+    - cadr caddr cddr ...
+    - map
+    - filter
+    - reduce
+    - sort
+    - nil? = != neq
 - (load "filename.lisp")
 - $ repl.pl filename.lisp
