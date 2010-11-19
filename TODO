@@ -1,3 +1,5 @@
+- cond
+- let
 - tests (nil? ...)
 - Helper file: cadr caddr cddr ... map, filter, reduce + tests
 - (load "filename.lisp")
