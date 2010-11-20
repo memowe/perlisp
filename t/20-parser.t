@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 19;
+use Test::More tests => 22;
 
 use PerLisp::Lexer;
 use_ok('PerLisp::Parser');
@@ -14,7 +14,8 @@ my $parser = PerLisp::Parser->new;
 sub parse {
     my $string = shift;
     my $tokens = $lexer->lex($string);
-    return $parser->parse($tokens);
+    my @exprs  = $parser->parse($tokens);
+    return shift @exprs;
 }
 
 # simple expressions
@@ -61,6 +62,25 @@ is(
     $tree->to_string,
     '(defin (fak n) (cond (= n 0) 1 (* n (fak (- n 1)))))',
     'right parsed complex expression stringification'
+);
+
+# multiple expressions
+my $tokens = $lexer->lex('42 (1 2 3)');
+@exprs  = $parser->parse($tokens);
+is($exprs[0]->to_string, 42, 'multiple expressions');
+is_deeply($exprs[1]->to_string, '(1 2 3)', 'multiple expressions');
+
+# more complex multiple expressions
+$tokens = $lexer->lex('
+    ; "the" true
+    (bind true (= 1 1))
+    ; "tre" false
+    (bind false (not true))
+');
+is_deeply(
+    [ map { $_->to_simple } $parser->parse($tokens) ],
+    [ ['bind', 'true', [qw(= 1 1)]], ['bind', 'false', [qw(not true)]] ],
+    'complex multiple expressions',
 );
 
 __END__

@@ -21,6 +21,11 @@ sub look_ahead {
     return $self->tokens->[0];
 }
 
+sub is_empty {
+    my $self = shift;
+    return @{$self->tokens} == 0;
+}
+
 sub to_string {
     my $self    = shift;
     my @strings = map { $_->to_string } @{$self->tokens};

@@ -13,7 +13,15 @@ use PerLisp::Expr::QuoteExpr;
 
 sub parse {
     my ($self, $tokens) = @_;
-    return $self->expr($tokens);
+
+    # expression container
+    my @exprs;
+
+    # one after another
+    push @exprs, $self->expr($tokens) until $tokens->is_empty;
+
+    # return expressions
+    return @exprs;
 }
 
 sub expr {

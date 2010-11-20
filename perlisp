@@ -7,15 +7,24 @@ use FindBin '$Bin';
 use lib "$Bin/lib";
 
 use PerLisp;
+use File::Slurp 'slurp';
 
+# init
 my $pl = PerLisp->new(initfile => "$Bin/init.perlisp");
 $pl->init;
 
-my @bound_symbols = sort keys %{$pl->context->binds};
+# perlisp files from command line
+foreach my $filename (@ARGV) {
+    
+    # filter
+    next unless -e -r $filename;
+
+    # load
+    $pl->eval("(load \"$filename\")");
+}
 
 # read eval print loop
 print "Hi, this is PerLisp.\n";
-print 'Bound symbols: ' . join(', ' => @bound_symbols) . "\n";
 $pl->read_eval_print_loop;
 print "Done.\n";
 

@@ -10,6 +10,9 @@ use PerLisp::TokenStream;
 sub lex {
     my ($self, $string) = @_;
 
+    # delete comments
+    $string =~ s/;.*//g;
+
     # cleanup
     $string =~ s/\s+/ /g;
     $string =~ s/^ //;

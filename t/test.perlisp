@@ -1,0 +1,11 @@
+; square function
+(define (xnorfzt-square x) (* x x))
+
+; cube function
+(define (xnorfzt-cube
+    x
+        )
+
+    (         * x
+        (xnorfzt-square x)
+            ))
