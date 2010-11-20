@@ -15,8 +15,9 @@ sub eval {
 
 sub to_string {
     my $self = shift;
-    return '(' . join(' ' => @{$self->params}) . ') -> ' . $self->body->to_string . "\n";
-    return 'Function';
+    my $param_string = '(' . join(' ' => @{$self->params}) . ')';
+    my $body_string  = $self->body->to_string;
+    return 'Function: ' . $param_string . ' -> ' . $body_string;
 }
 
 sub to_simple {
