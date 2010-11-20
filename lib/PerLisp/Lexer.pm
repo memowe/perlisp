@@ -37,7 +37,7 @@ sub lex {
         };
 
         # number
-        $string =~ s/^(\d+(\.\d+)?) ?// and do {
+        $string =~ s/^(-?\d+(\.\d+)?) ?// and do {
             $tokens->add(PerLisp::Token->new(
                 name => 'NUMBER',
                 attr => $1,
