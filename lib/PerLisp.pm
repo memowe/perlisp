@@ -7,7 +7,6 @@ use strict;
 use warnings;
 
 use IO::Handle;
-use FindBin '$Bin';
 use File::Slurp 'slurp';
 use PerLisp::Operators;
 use PerLisp::Operators::Arithmetic;
@@ -16,20 +15,23 @@ use PerLisp::Parser;
 use PerLisp::Context;
 use PerLisp::Expr::Operator;
 
-# RE tools
-__PACKAGE__->attr(lexer  => sub { PerLisp::Lexer->new });
-__PACKAGE__->attr(parser => sub { PerLisp::Parser->new });
+__PACKAGE__->attr(context => sub { PerLisp::Context->new });
+__PACKAGE__->attr(lexer   => sub { PerLisp::Lexer->new });
+__PACKAGE__->attr(parser  => sub { PerLisp::Parser->new });
 
-# P tools
+# REPL handles
 __PACKAGE__->attr(input  => sub {IO::Handle->new->fdopen(fileno(STDIN),'r')});
 __PACKAGE__->attr(output => sub {IO::Handle->new->fdopen(fileno(STDOUT),'w')});
 
-# E tools
-__PACKAGE__->attr(context => sub { PerLisp::Context->new });
+# init file path
+__PACKAGE__->attr('initfile');
 
 # set operators
 sub init {
     my $self = shift;
+
+    # fresh context
+    $self->context(PerLisp::Context->new);
 
     # here may be dragons
     no strict 'refs';
@@ -79,14 +81,18 @@ sub init {
     }
 
     # init file
-    my $init_filename = "$Bin/init.perlisp";
-    if (-e -r $init_filename) {
+    if ($self->initfile) {
+        if (-e -r $self->initfile) {
 
-        # slurp
-        my $perlisp = slurp $init_filename;
+            # slurp
+            my $perlisp = slurp $self->initfile;
 
-        # eval
-        $self->eval_multiple_expressions($perlisp);
+            # eval
+            $self->eval_multiple_expressions($perlisp);
+        }
+        else {
+            die "Couldn't read init file " . $self->initfile . "\n";
+        }
     }
 }
 
@@ -105,7 +111,6 @@ sub eval {
 
 sub read_eval_print_loop {
     my $self = shift;
-    $self->init;
 
     # read until EOD
     while (defined( my $line = $self->input->getline )) {
