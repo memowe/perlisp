@@ -7,6 +7,8 @@ use strict;
 use warnings;
 
 use IO::Handle;
+use FindBin '$Bin';
+use File::Slurp 'slurp';
 use PerLisp::Operators;
 use PerLisp::Operators::Arithmetic;
 use PerLisp::Lexer;
@@ -75,6 +77,17 @@ sub init {
         # save to context
         $self->context->set($short => $operator);
     }
+
+    # init file
+    my $init_filename = "$Bin/init.perlisp";
+    if (-e -r $init_filename) {
+
+        # slurp
+        my $perlisp = slurp $init_filename;
+
+        # eval
+        $self->eval_multiple_expressions($perlisp);
+    }
 }
 
 sub eval {
@@ -89,7 +102,6 @@ sub eval {
     # eval
     return $expr->eval($self->context);
 }
-
 
 sub read_eval_print_loop {
     my $self = shift;
@@ -113,6 +125,22 @@ sub read_eval_print_loop {
             $self->output->print("Error: $msg");
         }
     }
+}
+
+sub eval_multiple_expressions {
+    my ($self, $string) = @_;
+
+    # comments
+    $string =~ s/;.*//g;
+
+    # cleanup
+    $string =~ s/\r\n/\n/g;
+
+    # split: expressions separated by double newlines
+    my @strings = split /\n{2}/ => $string;
+
+    # eval
+    return [ map { $self->eval($_) } @strings ];
 }
 
 1;

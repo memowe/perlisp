@@ -1,10 +1,6 @@
-- Helper file:
-    - true, false
-    - cadr caddr cddr ... !=
-    - map
-    - filter
-    - reduce
-    - sort
+- write tests for true, false, cadr, cddr, caddr, cdddr, cadddr, map, filter
 - (load "filename.lisp")
 - $ repl.pl filename.lisp
+- sort in helper file
 - equalness of quoted expressions?
+- better eval_multiple_expressions
