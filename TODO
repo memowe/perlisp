@@ -1,5 +1,5 @@
-- cond, nil, equal, logical_and, logical_or, logical_not tests
 - Helper file:
+    - true, false
     - cadr caddr cddr ... !=
     - map
     - filter
