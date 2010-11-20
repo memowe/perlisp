@@ -15,6 +15,7 @@ sub eval {
 
 sub to_string {
     my $self = shift;
+    return '(' . join(' ' => @{$self->params}) . ') -> ' . $self->body->to_string . "\n";
     return 'Function';
 }
 
@@ -37,7 +38,15 @@ sub apply {
 
     # create local param bindings
     my %binds;
-    $binds{$_} = shift @$args for @{$self->params};
+    foreach my $param (@{$self->params}) {
+        
+        # eval argument
+        my $arg = shift @$args;
+        my $val = $arg->eval($context);
+
+        # bind
+        $binds{$param} = $val;
+    }
 
     # static scope
     $context = $self->context;
