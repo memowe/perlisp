@@ -6,6 +6,7 @@ use warnings;
 
 use feature 'switch';
 
+use PerLisp::Expr::Symbol;
 use PerLisp::Expr::List;
 use PerLisp::Expr::Function;
 use PerLisp::Expr::Boolean;
@@ -13,6 +14,7 @@ use PerLisp::Expr::QuoteExpr;
 
 our %short_name = (
     bind_name   => 'bind',
+    bound       => 'bound',
     cons        => 'cons',
     list        => 'list',
     car         => 'car',
@@ -39,6 +41,18 @@ sub bind_name { # eval only second argument
 
     # return the value
     return $value;
+}
+
+sub bound { # has no arguments
+    my $context = shift;
+
+    # get all names
+    my @names = sort keys %{$context->binds};
+
+    # create symbols
+    my @symbols = map { PerLisp::Expr::Symbol->new(name => $_) } @names;
+
+    return PerLisp::Expr::List->new(exprs => \@symbols);
 }
 
 sub cons { # eval both arguments

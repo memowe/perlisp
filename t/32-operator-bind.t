@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 4;
+use Test::More tests => 6;
 
 use PerLisp;
 
@@ -22,5 +22,14 @@ is($pl->context->get('foo')->to_simple, 42, 'foo set right');
 # call bind with the wrong argument count
 eval { $pl->eval('(bind quux)') };
 is($@, "bind needs exactly two arguments.\n", 'right error message');
+
+# get all bound names with the bound operator
+my $bound = $pl->eval('(bound)');
+isa_ok($bound, 'PerLisp::Expr::List', 'bound operator return value');
+is(
+    $bound->to_string,
+    '(' . join(' ' => sort keys %{$pl->context->binds}) . ')',
+    'right bound names list',
+);
 
 __END__

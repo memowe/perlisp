@@ -11,7 +11,7 @@ my $pl = PerLisp->new;
 $pl->init;
 
 my @operators = qw(
-    bind
+    bind bound
     cons list car cdr
     lambda define
     cond nil? =
