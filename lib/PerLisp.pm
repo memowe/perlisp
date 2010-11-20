@@ -62,7 +62,7 @@ sub init {
 
     # load arithmetic operators
     @long_names = qw(
-        plus minus mult div pow mod
+        plus minus mult div pow mod less_than greater_than
     );
     %short_name = %PerLisp::Operators::Arithmetic::short_name;
     foreach my $name (@long_names) {

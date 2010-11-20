@@ -17,7 +17,7 @@ my @operators = qw(
     cond nil? =
     and or not
     load
-    + - * / ^ %
+    + - * / ^ % < >
 );
 
 # all operators bound
