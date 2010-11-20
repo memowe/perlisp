@@ -1,4 +1,3 @@
-- write tests for true, false, cadr, cddr, caddr, cdddr, cadddr, map, filter
 - (load "filename.lisp")
 - $ repl.pl filename.lisp
 - sort in helper file
