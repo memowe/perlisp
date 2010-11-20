@@ -9,6 +9,7 @@ use feature 'switch';
 use PerLisp::Expr::List;
 use PerLisp::Expr::Function;
 use PerLisp::Expr::Boolean;
+use PerLisp::Expr::QuoteExpr;
 
 our %short_name = (
     bind_name   => 'bind',
@@ -147,8 +148,10 @@ sub define { # eval nothing
 sub cond { # eval something
     my ($context, @args) = @_;
 
-    # has else expression
-    my $else = @args % 2 ? pop @args : undef;
+    die "cond needs an odd number of arguments.\n" unless @args % 2;
+
+    # else expression
+    my $else = pop @args;
 
     # simple conditionals
     my @cond;
@@ -161,12 +164,12 @@ sub cond { # eval something
     foreach my $cond (@cond) {
 
         # condition
-        my $bool = $cond->if->eval($context);
+        my $bool = $cond->{if}->eval($context);
         die "conditions need to return a Boolean.\n"
             unless $bool->isa('PerLisp::Expr::Boolean');
 
         # true!
-        return $cond->then->eval($context) if $bool->value;
+        return $cond->{then}->eval($context) if $bool->value;
     }
 
     # else
@@ -201,6 +204,9 @@ sub equal { # eval both arguments
     my $true  = $PerLisp::Expr::Boolean::TRUE;
     my $false = $PerLisp::Expr::Boolean::FALSE;
 
+    # undefined shorthand
+    return $false unless defined $a and defined $b;
+
     # evaluating to the same expression object
     return $true if $a == $b;
 
@@ -230,9 +236,18 @@ sub equal { # eval both arguments
         # different length shorthand
         return $false unless @{$a->exprs} == @{$b->exprs};
 
+        # empty list shorthand
+        return $true if @{$a->exprs} == 0 and @{$b->exprs} == 0;
+
+        # check car
+        my $q_a_car = PerLisp::Expr::QuoteExpr->new(expr => $a->car);
+        my $q_b_car = PerLisp::Expr::QuoteExpr->new(expr => $b->car);
+        return $false unless equal($context, $q_a_car, $q_b_car)->value;
+
         # recursive equalness
-        return $false unless equal($context, $a->car, $b->car);
-        return $true  if     equal($context, $a->cdr, $b->cdr);
+        my $q_a_cdr = PerLisp::Expr::QuoteExpr->new(expr => $a->cdr);
+        my $q_b_cdr = PerLisp::Expr::QuoteExpr->new(expr => $b->cdr);
+        return $true if equal($context, $q_a_cdr, $q_b_cdr)->value;
     }
 
     # else: not equal
