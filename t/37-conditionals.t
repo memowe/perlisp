@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 34;
+use Test::More tests => 36;
 
 use PerLisp;
 use PerLisp::Expr::Boolean;
@@ -39,6 +39,10 @@ is($pl->eval('(= "foo" "bar")')->to_string, 'false', 'different strings');
 # equal: two symbols
 is($pl->eval("(= 'foo 'foo)")->to_string, 'true', 'same symbol');
 is($pl->eval("(= 'foo 'bar)")->to_string, 'false', 'different symbols');
+
+# equal: two quoted expressions
+is($pl->eval("(= ''(1 3) ''(1 3))")->to_string, 'true', 'same quote');
+is($pl->eval("(= ''(1 3) ''(1 4))")->to_string, 'false', 'different quotes');
 
 # equal: two lists
 is($pl->eval("(= a '(1 2 3))")->to_string, 'true', 'same list');

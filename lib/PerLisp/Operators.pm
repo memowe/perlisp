@@ -244,6 +244,11 @@ sub equal { # eval both arguments
         return $true if $a->name eq $b->name;
     }
 
+    # two quoted expressions
+    elsif (ref($a) =~ /QuoteExpr/ and ref($b) =~ /QuoteExpr/) {
+        return $true if $a->to_string eq $b->to_string;
+    }
+
     # two lists
     elsif (ref($a) =~ /List/ and ref($b) =~ /List/) {
 
