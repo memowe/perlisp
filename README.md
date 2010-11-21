@@ -29,7 +29,7 @@ View the API docs via
     $ perldoc PerLisp
 
 If you don't want to install all that stuff, you can call the perlisp script
-from the project root director:
+from the project root directory:
 
     $ cd ~/code/perlisp
     $ perl perlisp
@@ -52,7 +52,7 @@ Start typing something like this:
     ->  1764
 
 You can find more inspirations from PerLisp::Init and the tests, especially
-t/50-init-file.t, which shows some use cases for the init functions.
+t/50-init.t, which shows some use cases for the init functions.
 
 Interpreter details
 -------------------
