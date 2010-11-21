@@ -7,8 +7,7 @@ use Test::More tests => 11;
 
 use PerLisp;
 
-my $pl = PerLisp->new;
-$pl->init;
+my $pl = PerLisp->new->init;
 
 # simple arithmetic operations
 is($pl->eval('(+ 3 7)')->to_simple, 10, 'right sum');

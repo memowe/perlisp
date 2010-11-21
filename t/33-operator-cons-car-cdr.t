@@ -7,8 +7,7 @@ use Test::More tests => 21;
 
 use PerLisp;
 
-my $pl = PerLisp->new;
-$pl->init;
+my $pl = PerLisp->new->init;
 
 # cons the empty list
 my $empty = $pl->eval('(cons)');

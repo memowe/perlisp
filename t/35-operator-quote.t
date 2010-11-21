@@ -7,8 +7,7 @@ use Test::More tests => 3;
 
 use PerLisp;
 
-my $pl = PerLisp->new;
-$pl->init;
+my $pl = PerLisp->new->init;
 
 # quoted empty list
 $pl->eval("(bind qfoo '())");

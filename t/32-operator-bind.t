@@ -7,8 +7,7 @@ use Test::More tests => 6;
 
 use PerLisp;
 
-my $pl = PerLisp->new;
-$pl->init;
+my $pl = PerLisp->new->init;
 
 # try to bind a number
 $pl->eval('(bind foo 42)');

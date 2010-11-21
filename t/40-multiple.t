@@ -7,8 +7,7 @@ use Test::More tests => 5;
 
 use PerLisp;
 
-my $pl = PerLisp->new;
-$pl->init;
+my $pl = PerLisp->new->init;
 
 # eval simple multiple expressions
 my @values = $pl->eval('37 (+ 17 25) (not (= 1 1))');

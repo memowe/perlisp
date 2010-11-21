@@ -7,8 +7,7 @@ use Test::More tests => 9;
 
 use PerLisp;
 
-my $pl = PerLisp->new;
-$pl->init;
+my $pl = PerLisp->new->init;
 
 # simple function construction
 my $fun = $pl->eval('(lambda (x) (* x x))');

@@ -8,8 +8,7 @@ use Test::More tests => 36;
 use PerLisp;
 use PerLisp::Expr::Boolean;
 
-my $pl = PerLisp->new;
-$pl->init;
+my $pl = PerLisp->new->init;
 
 # empty list predicate
 is($pl->eval("(nil? '())")->to_string, 'true', 'empty list');

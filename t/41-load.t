@@ -8,8 +8,7 @@ use Test::More tests => 2;
 use PerLisp;
 use FindBin '$Bin';
 
-my $pl = PerLisp->new;
-$pl->init;
+my $pl = PerLisp->new->init;
 
 my $filename = "$Bin/test.perlisp";
 $pl->eval("(load \"$filename\")");

@@ -7,8 +7,7 @@ use Test::More tests => 36;
 
 use PerLisp;
 
-my $pl = PerLisp->new;
-$pl->init;
+my $pl = PerLisp->new->init;
 
 # empty list
 my $list = $pl->eval('(list)');

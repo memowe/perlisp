@@ -7,8 +7,7 @@ use Test::More 'no_plan';
 
 use_ok('PerLisp');
 
-my $pl = PerLisp->new;
-$pl->init;
+my $pl = PerLisp->new->init;
 
 my @operators = qw(
     bind bound
