@@ -15,6 +15,7 @@ my @operators = qw(
     lambda define
     cond nil? =
     and or not
+    type
     load
     + - * / ^ % < >
 );

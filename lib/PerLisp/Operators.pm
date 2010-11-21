@@ -27,6 +27,7 @@ our %short_name = (
     logical_and => 'and',
     logical_or  => 'or',
     logical_not => 'not',
+    type        => 'type',
 );
 
 sub bind_name { # eval only second argument
@@ -335,6 +336,21 @@ sub logical_not { # eval the argument
     return $boolean->value ?
             $PerLisp::Expr::Boolean::FALSE
         :   $PerLisp::Expr::Boolean::TRUE;
+}
+
+sub type { # eval the argument
+    my ($context, $expr) = @_;
+
+    # eval
+    my $val = $expr->eval($context);
+
+    # get class parts
+    my $class  = ref $val;
+    my @parts  = split /::/ => $class;
+    my $type_s = pop @parts;
+
+    # return last part
+    return PerLisp::Expr::Symbol->new(name => $type_s);
 }
 
 1;

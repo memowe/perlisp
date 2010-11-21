@@ -41,6 +41,7 @@ sub init {
         lambda define
         cond is_nil equal
         logical_and logical_or logical_not
+        type
     );
     my %short_name = %PerLisp::Operators::short_name;
     foreach my $name (@long_names) {
