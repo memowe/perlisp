@@ -10,8 +10,7 @@ use PerLisp;
 use File::Slurp 'slurp';
 
 # init
-my $pl = PerLisp->new(initfile => "$Bin/init.perlisp");
-$pl->init;
+my $pl = PerLisp->new->init;
 
 # perlisp files from command line
 foreach my $filename (@ARGV) {

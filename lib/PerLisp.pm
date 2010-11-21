@@ -14,6 +14,7 @@ use PerLisp::Lexer;
 use PerLisp::Parser;
 use PerLisp::Context;
 use PerLisp::Expr::Operator;
+use PerLisp::Init;
 
 __PACKAGE__->attr(context => sub { PerLisp::Context->new });
 __PACKAGE__->attr(lexer   => sub { PerLisp::Lexer->new });
@@ -22,9 +23,6 @@ __PACKAGE__->attr(parser  => sub { PerLisp::Parser->new });
 # REPL handles
 __PACKAGE__->attr(input  => sub {IO::Handle->new->fdopen(fileno(STDIN),'r')});
 __PACKAGE__->attr(output => sub {IO::Handle->new->fdopen(fileno(STDOUT),'w')});
-
-# init file path
-__PACKAGE__->attr('initfile');
 
 # set operators
 sub init {
@@ -106,18 +104,11 @@ sub init {
         },
     ));
 
-    # init file
-    if ($self->initfile) {
-        if (-e -r $self->initfile) {
-            my $init = $self->initfile;
+    # init definitions
+    $self->eval($PerLisp::Init::definitions);
 
-            # eval init file
-            $self->eval("(load \"$init\")");
-        }
-        else {
-            die "Couldn't read init file " . $self->initfile . "\n";
-        }
-    }
+    # chaining
+    return $self;
 }
 
 sub eval {
@@ -161,3 +152,87 @@ sub read_eval_print_loop {
 
 1;
 __END__
+
+=head1 NAME
+
+PerLisp
+
+=head1 VERSION
+
+0.1
+
+=head1 SYNOPSIS
+
+    use PerLisp;
+    my $pl = PerLisp->new;  # create interpreter
+    $pl->init;              # load operators and convenience functions
+    print $pl->eval('(+ 17 25)')->to_string; # "42"
+
+=head1 ABSTRACT
+
+This is a simple statically scoped Lisp interpreter. During the lecture
+"Structure and Interpretation of Programming Languages", held by Achim Clausing
+(WWU Münster, Germany), I needed to try out diffent things, so I wrote this.
+
+See the file README.md in the PerLisp distribution for a quick start guide.
+
+=head1 API
+
+=head2 ATTRIBUTES
+
+=head3 context
+
+A C<PerLisp::Context> object. The main "namespace".
+
+=head3 lexer
+
+A C<PerLisp::Lexer> object. The Lisp lexer.
+
+=head3 parser
+
+A C<PerLisp::Parser> object. The Lisp parser.
+
+=head3 input
+
+The input filehandle for the read eval print loop. STDIN by default.
+
+=head3 output
+
+The output filehandle for the read eval print loop. STDOUT by default.
+
+=head2 METHODS
+
+=head3 new
+
+The constructor. Set other values for the attributes via hashref or a hashy
+list. In most cases the default values work just fine.
+
+=head3 init
+
+Sets default operators and some convenience functions. Returns the interpreter
+object, so you can chain the method calls:
+
+    my $perlisp = PerLisp->new->init;
+
+=head3 eval
+
+Evals Lisp code as a string. In list context, it returns a list of all resulting
+PerLisp expression objects. In scalar context, it returns the first.
+
+You can stringify PerLisp expressions with the C<to_string> method. The
+C<to_simple> method will return a simplified perl data structure and is mostly
+used for testing and easy introspection with L<Data::Dumper>.
+
+=head3 read_eval_print_loop
+
+Creates some kind of a PerLisp shell.
+
+=head1 AUTHOR, LICENSE, BUGS
+
+Copyright (c) 2010 Mirko Westermeier, <mirko@westermeier.de>
+
+This software is released under the MIT license (view MIT-LICENSE for details).
+
+If you found a bug, please contact me via mail or github. You can also use
+github's issue tracker. Please provide (failing) tests for your bugs, patches
+or feature requests.

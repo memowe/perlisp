@@ -9,8 +9,7 @@ use FindBin '$Bin';
 use PerLisp;
 use PerLisp::Expr::Boolean;
 
-my $pl = PerLisp->new(initfile => "$Bin/../init.perlisp");
-$pl->init;
+my $pl = PerLisp->new->init;
 
 # true and false symbols
 is($pl->eval('(= true (= 1 1))')->to_string, 'true', 'true symbol');

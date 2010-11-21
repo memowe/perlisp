@@ -1,3 +1,12 @@
+package PerLisp::Init;
+
+use strict;
+use warnings;
+
+our $definitions = join '' => <DATA>;
+
+1;
+__DATA__
 ; "the" true
 (bind true (= 1 1))
 

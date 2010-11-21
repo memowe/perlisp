@@ -19,11 +19,11 @@ is($values[2]->to_string, 'false', 'third expression');
 # eval more complex multiple expressions
 $pl->eval('
     ; "the" true
-    (bind true (= 1 1))
+    (bind t (= 1 1))
     ; "tre" false
-    (bind false (not true))
+    (bind f (not true))
 ');
-is($pl->eval('(= true (= 2 2))')->to_string, 'true', 'first expression');
-is($pl->eval('(= false (= 2 1))')->to_string, 'true', 'second expression');
+is($pl->eval('(= t (= 2 2))')->to_string, 'true', 'first expression');
+is($pl->eval('(= f (= 2 1))')->to_string, 'true', 'second expression');
 
 __END__

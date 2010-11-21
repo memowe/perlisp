@@ -20,13 +20,6 @@ my @operators = qw(
     + - * / ^ % < >
 );
 
-# all operators bound
-is_deeply(
-    [ sort keys %{$pl->context->binds} ],
-    [ sort @operators ],
-    'bound right operators',
-);
-
 # right stringifications
 foreach my $operator (@operators) {
     is(

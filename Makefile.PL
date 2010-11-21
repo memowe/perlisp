@@ -11,7 +11,7 @@ WriteMakefile(
     ($ExtUtils::MakeMaker::VERSION >= 6.3002
       ? ('LICENSE'=> 'mit')
       : ()),
-    PL_FILES            => {},
+    EXE_FILES => ['perlisp'],
     PREREQ_PM => {
         'Test::More'    => 0,
         'IO::Handle'    => 0,
