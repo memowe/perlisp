@@ -6,14 +6,35 @@ the lecture "Structure and Interpretation of Programming Languages", held by
 Achim Clausing (WWU Münster, Germany), I needed to try out diffent things, so I
 wrote this.
 
+**DISCLAIMER** This is **not** production ready. I use it to play around and
+I think there are many bugs lurking around. You have been warned! :-)
+
 How to start?
 -------------
 
-Chdir to the project directory (which is where you found this README, I think)
-and execute the read eval print loop tool (you need Perl 5.10 to do this):
+Install the distro like a normal Perl distro:
+
+    $ perl Makefile.PL
+    $ make
+    $ make test
+    $ make install
+    $ make clean
+
+Now you can call the perlisp script which starts a read eval print loop:
+
+    $ perlisp
+
+View the API docs via
+
+    $ perldoc PerLisp
+
+If you don't want to install all that stuff, you can call the perlisp script
+from the project root director:
 
     $ cd ~/code/perlisp
     $ perl perlisp
+
+And it should just work. Now let's go!
 
 PerLisp uses the bind operator to bind values to names, you have a lambda
 operator to generate functions and the convenience operator define to bind a
@@ -21,7 +42,7 @@ function to a name in one step. With the bound operator you get a list of all
 bound names. Most of them come from the init.perlisp file which is loaded while
 the interpreter starts.
 
-Now start typing something like this:
+Start typing something like this:
 
     (+ 17 25)
     ->  42
@@ -30,23 +51,8 @@ Now start typing something like this:
     (square 42)
     ->  1764
 
-You can find more inspirations from init.perlisp and the tests, especially
+You can find more inspirations from PerLisp::Init and the tests, especially
 t/50-init-file.t, which shows some use cases for the init functions.
-
-This distribution is a installable perl module, so you can
-
-    $ perl Makefile.PL
-    $ make
-    $ make test
-    $ make install
-    $ make clean
-
-but you don't have to. While I think the code is pretty readable, it might be
-a good thing to install the distro and
-
-    $ perldoc PerLisp
-
-to view the API.
 
 Interpreter details
 -------------------
@@ -60,6 +66,7 @@ classes to get you started with Lisp:
 * PerLisp::Expr::* - Lisp expressions
 * PerLisp::Context - objects which store value-name bindings
 * PerLisp::Operators - perl implementations of built-in operators
+* PerLisp::Init - a container package around the init script
 
 View the code for more implementation details, I tried hard to make it very
 readable (even if you don't know much Perl).
