@@ -45,3 +45,13 @@ __DATA__
 (define (reduce f l neutral)
     (cond (nil? l) neutral
         (f (car l) (reduce f (cdr l) neutral))))
+
+; type helpers
+(define (number?   x) (= (type x) 'Number))
+(define (string?   x) (= (type x) 'String))
+(define (symbol?   x) (= (type x) 'Symbol))
+(define (boolean?  x) (= (type x) 'Boolean))
+(define (list?     x) (= (type x) 'List))
+(define (quote?    x) (= (type x) 'QuoteExpr))
+(define (function? x) (= (type x) 'Function))
+(define (operator? x) (= (type x) 'Operator))
