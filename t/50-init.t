@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 35;
+use Test::More tests => 58;
 
 use FindBin '$Bin';
 use PerLisp;
@@ -23,23 +23,45 @@ is($pl->eval('(neq 42 17)')->to_string, 'true', 'neq function');
 is($pl->eval('(!= 42 (+ 17 25))')->to_string, 'false', '!= function');
 is($pl->eval('(!= 42 17)')->to_string, 'true', '!= function');
 
-# c[ad]d*r helpers
-$pl->eval("(bind to-ten '(1 2 3 4 5 6 7 8 9 10))");
-is($pl->eval('(cadr to-ten)')->to_string, 2, 'cadr');
-is($pl->eval('(caddr to-ten)')->to_string, 3, 'caddr');
-is($pl->eval('(cadddr to-ten)')->to_string, 4, 'cadddr');
-is_deeply(
-    $pl->eval('(cddr to-ten)')->to_simple,
-    [ 3 .. 10 ],
-    'cddr',
-);
-is_deeply(
-    $pl->eval('(cdddr to-ten)')->to_simple,
-    [ 4 .. 10 ],
-    'cdddr',
-);
+# c[ad]d*r helpers: length 2
+$pl->eval("(bind cl1 '((a b) c d))");
+is($pl->eval('(caar cl1)')->to_string, 'a', 'caar');
+is($pl->eval('(cadr cl1)')->to_string, 'c', 'cadr');
+is($pl->eval('(cdar cl1)')->to_string, '(b)', 'cdar');
+is($pl->eval('(cddr cl1)')->to_string, '(d)', 'cddr');
+
+# c[ad]d*r helpers: length 3
+$pl->eval("(bind cl2 '(((a b) c d) (e f) g h))");
+is($pl->eval('(caaar cl2)')->to_string, 'a', 'caaar');
+is($pl->eval('(caadr cl2)')->to_string, 'e', 'caadr');
+is($pl->eval('(cadar cl2)')->to_string, 'c', 'cadar');
+is($pl->eval('(caddr cl2)')->to_string, 'g', 'caddr');
+is($pl->eval('(cdaar cl2)')->to_string, '(b)', 'cdaar');
+is($pl->eval('(cdadr cl2)')->to_string, '(f)', 'cdadr');
+is($pl->eval('(cddar cl2)')->to_string, '(d)', 'cddar');
+is($pl->eval('(cdddr cl2)')->to_string, '(h)', 'cdddr');
+
+# c[ad]d*r helpers: length 4
+$pl->eval("(bind cl3 '((((a b) c d) (e f) g h) ((i j) k l) (m n) o p))");
+is($pl->eval('(caaaar cl3)')->to_string, 'a', 'caaaar');
+is($pl->eval('(caaadr cl3)')->to_string, 'i', 'caaadr');
+is($pl->eval('(caadar cl3)')->to_string, 'e', 'caadar');
+is($pl->eval('(caaddr cl3)')->to_string, 'm', 'caaddr');
+is($pl->eval('(cadaar cl3)')->to_string, 'c', 'cadaar');
+is($pl->eval('(cadadr cl3)')->to_string, 'k', 'cadadr');
+is($pl->eval('(caddar cl3)')->to_string, 'g', 'caddar');
+is($pl->eval('(cadddr cl3)')->to_string, 'o', 'cadddr');
+is($pl->eval('(cdaaar cl3)')->to_string, '(b)', 'cdaaar');
+is($pl->eval('(cdaadr cl3)')->to_string, '(j)', 'cdaadr');
+is($pl->eval('(cdadar cl3)')->to_string, '(f)', 'cdadar');
+is($pl->eval('(cdaddr cl3)')->to_string, '(n)', 'cdaddr');
+is($pl->eval('(cddaar cl3)')->to_string, '(d)', 'cddaar');
+is($pl->eval('(cddadr cl3)')->to_string, '(l)', 'cddadr');
+is($pl->eval('(cdddar cl3)')->to_string, '(h)', 'cdddar');
+is($pl->eval('(cddddr cl3)')->to_string, '(p)', 'cddddr');
 
 # map
+$pl->eval("(bind to-ten '(1 2 3 4 5 6 7 8 9 10))");
 $pl->eval('(define (add-1 x) (+ x 1))');
 is_deeply(
     $pl->eval('(map add-1 to-ten)')->to_simple,
