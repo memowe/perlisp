@@ -57,10 +57,8 @@ sub bound { # has no arguments
 }
 
 sub let { # eval only the second argument
+    die "bind needs exactly three arguments.\n" unless @_ == 4;
     my ($context, $symbol, $value_expr, $expr) = @_;
-
-    die "let needs three arguments.\n"
-        unless defined($symbol) and defined($value_expr) and defined($expr);
 
     # new symbol
     die "let's first argument needs to be a symbol.\n"
