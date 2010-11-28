@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use PerLisp;
 
@@ -30,5 +30,8 @@ is(
     '(' . join(' ' => sort keys %{$pl->context->binds}) . ')',
     'right bound names list',
 );
+
+# eval with a new bind (let)
+is($pl->eval('(let foo 17 (+ foo 25))')->to_simple, 42, 'let');
 
 __END__

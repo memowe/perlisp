@@ -10,7 +10,7 @@ use_ok('PerLisp');
 my $pl = PerLisp->new->init;
 
 my @operators = qw(
-    bind bound
+    bind bound let
     cons list car cdr
     lambda define
     cond =

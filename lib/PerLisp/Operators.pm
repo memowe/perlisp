@@ -15,6 +15,7 @@ use PerLisp::Expr::QuoteExpr;
 our %short_name = (
     bind_name   => 'bind',
     bound       => 'bound',
+    let         => 'let',
     cons        => 'cons',
     list        => 'list',
     car         => 'car',
@@ -53,6 +54,27 @@ sub bound { # has no arguments
     my @symbols = map { PerLisp::Expr::Symbol->new(name => $_) } @names;
 
     return PerLisp::Expr::List->new(exprs => \@symbols);
+}
+
+sub let { # eval only the second argument
+    my ($context, $symbol, $value_expr, $expr) = @_;
+
+    die "let needs three arguments.\n"
+        unless defined($symbol) and defined($value_expr) and defined($expr);
+
+    # new symbol
+    die "let's first argument needs to be a symbol.\n"
+        unless $symbol->isa('PerLisp::Expr::Symbol');
+    my $name = $symbol->name;
+
+    # new value
+    my $value = $value_expr->eval($context);
+
+    # bind symbol to value
+    my $new_context = $context->specialize({$name => $value});
+
+    # eval the expression in the new context
+    return $expr->eval($new_context);
 }
 
 sub cons { # eval both arguments

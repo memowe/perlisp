@@ -36,7 +36,7 @@ sub init {
 
     # load basic operators
     my @long_names = qw(
-        bind_name bound
+        bind_name bound let
         cons list car cdr
         lambda define
         cond equal
