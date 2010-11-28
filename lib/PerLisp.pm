@@ -36,6 +36,7 @@ sub init {
 
     # load basic operators
     my @long_names = qw(
+        quote
         bind_name bound let
         cons list car cdr
         lambda define

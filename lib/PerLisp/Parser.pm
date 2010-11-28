@@ -9,7 +9,6 @@ use PerLisp::Expr::Number;
 use PerLisp::Expr::String;
 use PerLisp::Expr::Symbol;
 use PerLisp::Expr::List;
-use PerLisp::Expr::QuoteExpr;
 
 sub parse {
     my ($self, $tokens) = @_;
@@ -73,8 +72,18 @@ sub symbol {
 
 sub quote {
     my ($self, $tokens) = @_;
-    return PerLisp::Expr::QuoteExpr->new(
-        expr => $self->expr($tokens),
+
+    # build quote symbol
+    my $quote_symbol = PerLisp::Expr::Symbol->new(
+        name => 'quote'
+    );
+
+    # parse next expression
+    my $quoted_expr = $self->expr($tokens);
+
+    # and hide it in a quote operator call
+    return PerLisp::Expr::List->new(
+        exprs => [$quote_symbol, $quoted_expr],
     );
 }
 

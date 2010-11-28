@@ -10,6 +10,7 @@ use_ok('PerLisp');
 my $pl = PerLisp->new->init;
 
 my @operators = qw(
+    quote
     bind bound let
     cons list car cdr
     lambda define

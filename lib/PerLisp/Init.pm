@@ -29,7 +29,6 @@ __DATA__
 (define (symbol?   x) (= (type x) 'Symbol))
 (define (boolean?  x) (= (type x) 'Boolean))
 (define (list?     x) (= (type x) 'List))
-(define (quote?    x) (= (type x) 'QuoteExpr))
 (define (function? x) (= (type x) 'Function))
 (define (operator? x) (= (type x) 'Operator))
 

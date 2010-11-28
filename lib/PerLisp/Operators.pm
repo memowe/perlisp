@@ -10,9 +10,9 @@ use PerLisp::Expr::Symbol;
 use PerLisp::Expr::List;
 use PerLisp::Expr::Function;
 use PerLisp::Expr::Boolean;
-use PerLisp::Expr::QuoteExpr;
 
 our %short_name = (
+    quote       => 'quote',
     bind_name   => 'bind',
     bound       => 'bound',
     let         => 'let',
@@ -29,6 +29,28 @@ our %short_name = (
     logical_not => 'not',
     type        => 'type',
 );
+
+# quote an expression
+sub _q {
+    my $expr = shift;
+
+    # quote symbol
+    my $quote_symbol = PerLisp::Expr::Symbol->new(
+        name => 'quote',
+    );
+
+    # build a quote operator call
+    return PerLisp::Expr::List->new(
+        exprs => [$quote_symbol, $expr],
+    );
+}
+
+sub quote { # eval nothing
+    my ($context, $expr) = @_;
+
+    # return the expression without evaluation
+    return $expr;
+}
 
 sub bind_name { # eval only second argument
     die "bind needs exactly two arguments.\n" unless @_ == 3;
@@ -247,11 +269,6 @@ sub equal { # eval both arguments
         return $true if $a->name eq $b->name;
     }
 
-    # two quoted expressions
-    elsif (ref($a) =~ /QuoteExpr/ and ref($b) =~ /QuoteExpr/) {
-        return $true if $a->to_string eq $b->to_string;
-    }
-
     # two lists
     elsif (ref($a) =~ /List/ and ref($b) =~ /List/) {
 
@@ -262,14 +279,10 @@ sub equal { # eval both arguments
         return $true if @{$a->exprs} == 0 and @{$b->exprs} == 0;
 
         # check car
-        my $q_a_car = PerLisp::Expr::QuoteExpr->new(expr => $a->car);
-        my $q_b_car = PerLisp::Expr::QuoteExpr->new(expr => $b->car);
-        return $false unless equal($context, $q_a_car, $q_b_car)->value;
+        return $false unless equal($context, _q($a->car), _q($b->car))->value;
 
         # recursive equalness
-        my $q_a_cdr = PerLisp::Expr::QuoteExpr->new(expr => $a->cdr);
-        my $q_b_cdr = PerLisp::Expr::QuoteExpr->new(expr => $b->cdr);
-        return $true if equal($context, $q_a_cdr, $q_b_cdr)->value;
+        return $true if equal($context, _q($a->cdr), _q($b->cdr))->value;
     }
 
     # else: not equal

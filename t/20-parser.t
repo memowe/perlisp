@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 22;
+use Test::More tests => 29;
 
 use PerLisp::Lexer;
 use_ok('PerLisp::Parser');
@@ -40,9 +40,19 @@ is($tree->to_string, '(a "b" 42)', 'right List stringification');
 
 # quoted "complex" expression
 $tree = parse('\'(a "b" 42)');
-isa_ok($tree, 'PerLisp::Expr::QuoteExpr', 'parsed quoted list');
-is_deeply($tree->to_simple, {quoted => [qw(a "b" 42)]}, 'right \'List');
-is($tree->to_string, '(a "b" 42)', 'right \'List stringification');
+isa_ok($tree, 'PerLisp::Expr::List', 'parsed quoted list');
+isa_ok($tree->exprs->[0], 'PerLisp::Expr::Symbol', 'first list item');
+is($tree->exprs->[0]->name, 'quote', 'parsed quoted list');
+is_deeply($tree->to_simple, ['quote', [qw(a "b" 42)]], 'right \'List');
+is($tree->to_string, '(quote (a "b" 42))', 'right \'List stringification');
+
+# double quoted expression
+$tree = parse("\'\'42");
+isa_ok($tree, 'PerLisp::Expr::List', 'parsed double quoted 42');
+isa_ok($tree->exprs->[1], 'PerLisp::Expr::List', 'nested quoted 42');
+isa_ok($tree->exprs->[1]->exprs->[1], 'PerLisp::Expr::Number', '42');
+is($tree->exprs->[1]->exprs->[1]->value, 42, 'right double quoted number');
+is_deeply($tree->to_simple, ['quote', [quote => 42]], '\'\' simplification');
 
 # complex expression
 $tree = parse("

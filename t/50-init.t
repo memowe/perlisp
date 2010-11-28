@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 61;
+use Test::More tests => 59;
 
 use FindBin '$Bin';
 use PerLisp;
@@ -39,8 +39,6 @@ is($pl->eval("(boolean? false)")->to_string, 'true', 'boolean?');
 is($pl->eval("(boolean? 'a)")->to_string, 'false', 'boolean?');
 is($pl->eval("(list? '(1 2 3))")->to_string, 'true', 'list?');
 is($pl->eval("(list? 'a)")->to_string, 'false', 'list?');
-is($pl->eval("(quote? ''a)")->to_string, 'true', 'quote?');
-is($pl->eval("(quote? 42)")->to_string, 'false', 'quote?');
 is($pl->eval("(function? map)")->to_string, 'true', 'function?');
 is($pl->eval("(function? 'a)")->to_string, 'false', 'function?');
 is($pl->eval("(operator? cons)")->to_string, 'true', 'operator?');

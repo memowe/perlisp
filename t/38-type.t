@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 13;
+use Test::More tests => 12;
 
 use PerLisp;
 use PerLisp::Expr::Boolean;
@@ -33,9 +33,6 @@ is($pl->eval("(= (type 'foo) 'Symbol)")->to_string, 'true', 'Symbol');
 
 # type of list
 is($pl->eval("(= (type '(foo)) 'List)")->to_string, 'true', 'List');
-
-# type of quoted expression
-is($pl->eval("(= (type ''42) 'QuoteExpr)")->to_string, 'true', 'QuoteExpr');
 
 # type of operator
 is($pl->eval("(= (type cons) 'Operator)")->to_string, 'true', 'Operator');

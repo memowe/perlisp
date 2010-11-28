@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use PerLisp;
 
@@ -22,5 +22,10 @@ is_deeply(
     ['foo', 'bar', [qw(baz quux)], '42'],
     'complex quoted list simplification',
 );
+
+# explicit quote operator call
+my $a = $pl->eval("'((foo 42) bar)");
+my $b = $pl->eval('(quote ((foo 42) bar))');
+is_deeply($a->to_simple, $b->to_simple, 'explicit quote operator call');
 
 __END__
