@@ -22,7 +22,6 @@ our %short_name = (
     lambda      => 'lambda',
     define      => 'define',
     cond        => 'cond',
-    is_nil      => 'nil?',
     equal       => '=',
     logical_and => 'and',
     logical_or  => 'or',
@@ -189,23 +188,6 @@ sub cond { # eval something
 
     # else
     return $else->eval($context);
-}
-
-sub is_nil { # eval the argument
-    my ($context, $list_expr) = @_;
-
-    # eval the list expression
-    my $list = $list_expr->eval($context);
-
-    # check listness
-    die 'nil? can\'t be applied on non list ' . $list->to_string . "\n"
-        unless $list->isa('PerLisp::Expr::List');
-
-    # list is empty
-    return $PerLisp::Expr::Boolean::TRUE unless @{$list->exprs};
-
-    # list is non-empty
-    return $PerLisp::Expr::Boolean::FALSE;
 }
 
 sub equal { # eval both arguments

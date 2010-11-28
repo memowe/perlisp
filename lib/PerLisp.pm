@@ -39,7 +39,7 @@ sub init {
         bind_name bound
         cons list car cdr
         lambda define
-        cond is_nil equal
+        cond equal
         logical_and logical_or logical_not
         type
     );

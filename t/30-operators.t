@@ -13,7 +13,7 @@ my @operators = qw(
     bind bound
     cons list car cdr
     lambda define
-    cond nil? =
+    cond =
     and or not
     type
     load

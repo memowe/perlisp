@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 58;
+use Test::More tests => 61;
 
 use FindBin '$Bin';
 use PerLisp;
@@ -22,6 +22,29 @@ is($pl->eval('(neq 42 (+ 17 25))')->to_string, 'false', 'neq function');
 is($pl->eval('(neq 42 17)')->to_string, 'true', 'neq function');
 is($pl->eval('(!= 42 (+ 17 25))')->to_string, 'false', '!= function');
 is($pl->eval('(!= 42 17)')->to_string, 'true', '!= function');
+
+# empty list helper
+is($pl->eval("(nil? '())")->to_string, 'true', 'nil? helper');
+is($pl->eval("(nil? '(foo bar))")->to_string, 'false', 'nil? helper');
+is($pl->eval("(nil? 42)")->to_string, 'false', 'nil? helper');
+
+# type helpers
+is($pl->eval("(number? 42)")->to_string, 'true', 'number?');
+is($pl->eval("(number? 'a)")->to_string, 'false', 'number?');
+is($pl->eval("(string? \"foo\")")->to_string, 'true', 'string?');
+is($pl->eval("(string? 'a)")->to_string, 'false', 'string?');
+is($pl->eval("(symbol? 'a)")->to_string, 'true', 'symbol?');
+is($pl->eval("(symbol? 42)")->to_string, 'false', 'symbol?');
+is($pl->eval("(boolean? false)")->to_string, 'true', 'boolean?');
+is($pl->eval("(boolean? 'a)")->to_string, 'false', 'boolean?');
+is($pl->eval("(list? '(1 2 3))")->to_string, 'true', 'list?');
+is($pl->eval("(list? 'a)")->to_string, 'false', 'list?');
+is($pl->eval("(quote? ''a)")->to_string, 'true', 'quote?');
+is($pl->eval("(quote? 42)")->to_string, 'false', 'quote?');
+is($pl->eval("(function? map)")->to_string, 'true', 'function?');
+is($pl->eval("(function? 'a)")->to_string, 'false', 'function?');
+is($pl->eval("(operator? cons)")->to_string, 'true', 'operator?');
+is($pl->eval("(operator? 'a)")->to_string, 'false', 'operator?');
 
 # c[ad]d*r helpers: length 2
 $pl->eval("(bind cl1 '((a b) c d))");
@@ -85,23 +108,5 @@ is($pl->eval('(sum to-ten)')->to_string, 55, 'reduce: sum');
 $pl->eval('(define (product l) (reduce * l 1))');
 is($pl->eval("(product '(0 1 2 3 42))")->to_string, 0, 'reduce: product');
 is($pl->eval('(product to-ten)')->to_string, 3628800, 'reduce: product');
-
-# type helpers
-is($pl->eval("(number? 42)")->to_string, 'true', 'number?');
-is($pl->eval("(number? 'a)")->to_string, 'false', 'number?');
-is($pl->eval("(string? \"foo\")")->to_string, 'true', 'string?');
-is($pl->eval("(string? 'a)")->to_string, 'false', 'string?');
-is($pl->eval("(symbol? 'a)")->to_string, 'true', 'symbol?');
-is($pl->eval("(symbol? 42)")->to_string, 'false', 'symbol?');
-is($pl->eval("(boolean? false)")->to_string, 'true', 'boolean?');
-is($pl->eval("(boolean? 'a)")->to_string, 'false', 'boolean?');
-is($pl->eval("(list? '(1 2 3))")->to_string, 'true', 'list?');
-is($pl->eval("(list? 'a)")->to_string, 'false', 'list?');
-is($pl->eval("(quote? ''a)")->to_string, 'true', 'quote?');
-is($pl->eval("(quote? 42)")->to_string, 'false', 'quote?');
-is($pl->eval("(function? map)")->to_string, 'true', 'function?');
-is($pl->eval("(function? 'a)")->to_string, 'false', 'function?');
-is($pl->eval("(operator? cons)")->to_string, 'true', 'operator?');
-is($pl->eval("(operator? 'a)")->to_string, 'false', 'operator?');
 
 __END__
