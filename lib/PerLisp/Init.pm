@@ -13,6 +13,13 @@ __DATA__
 ; "tre" false
 (bind false (not true))
 
+; (not) equal aliases
+(bind eq =)
+
+(define (neq x y) (not (eq x y)))
+
+(bind != neq)
+
 ; car/cdr convenience functions
 (define (cadr l)
     (car (cdr l)))

@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 29;
+use Test::More tests => 35;
 
 use FindBin '$Bin';
 use PerLisp;
@@ -14,6 +14,14 @@ my $pl = PerLisp->new->init;
 # true and false symbols
 is($pl->eval('(= true (= 1 1))')->to_string, 'true', 'true symbol');
 is($pl->eval('(= false (= 1 2))')->to_string, 'true', 'false symbol');
+
+# equal aliases
+is($pl->eval('(eq 42 (+ 17 25))')->to_string, 'true', 'eq function');
+is($pl->eval('(eq 42 17)')->to_string, 'false', 'eq function');
+is($pl->eval('(neq 42 (+ 17 25))')->to_string, 'false', 'neq function');
+is($pl->eval('(neq 42 17)')->to_string, 'true', 'neq function');
+is($pl->eval('(!= 42 (+ 17 25))')->to_string, 'false', '!= function');
+is($pl->eval('(!= 42 17)')->to_string, 'true', '!= function');
 
 # c[ad]d*r helpers
 $pl->eval("(bind to-ten '(1 2 3 4 5 6 7 8 9 10))");
