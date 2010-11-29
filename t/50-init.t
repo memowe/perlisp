@@ -5,7 +5,6 @@ use warnings;
 
 use Test::More tests => 59;
 
-use FindBin '$Bin';
 use PerLisp;
 use PerLisp::Expr::Boolean;
 
