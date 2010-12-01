@@ -1,0 +1,141 @@
+; lisp in PerLisp (dynamically scoped)
+; highly inspired by m.lisp in tLisp from Achim Clausing, WWU Münster
+
+; extend a given context
+(bind bind-set (lambda (sym expr context)
+    (cons (cons sym (cons expr (quote ()))) context)))
+
+; bind a list of values to a list of symbols
+(bind bind-list (lambda (syms vals context)
+    (cond
+        (nil? syms) context
+        (bind-list (cdr syms) (cdr vals)
+            (bind-set (car syms) (car vals) context)))))
+
+; get a bound value from context
+(bind bind-get (lambda (sym context)
+    (cond
+        (nil? context)          (quote UNBOUND)
+        (= sym (caar context))  (cadar context)
+        (bind-get sym (cdr context)))))
+
+; eval an expression in a context
+(bind eval (lambda (expr context)
+    (cond
+        (nil? expr)             (quote EMPTY)
+        (= (type expr) (quote String)) expr
+        (= (type expr) (quote Number)) expr
+        (= (type expr) (quote Symbol)) (bind-get expr context)
+        (apply (eval (car expr) context) (cdr expr) context))))
+
+; eval all list items
+(bind eval-items (lambda (l context)
+    (cond (nil? l) l
+        (cons (eval (car l) context) (eval-items (cdr l) context)))))
+
+; function constructor
+(bind make-function (lambda (args body)
+    (cons (quote function) (cons args (cons body (quote ()))))))
+
+; apply a procedure on arguments
+(bind apply (lambda (f args context)
+    (cond
+        (= f (quote (op quote))) (car args)
+        (= f (quote (op bind)))
+            (bind-set (car args) (eval (cadr args) context) context)
+        (= f (quote (op cond))) (apply-cond args context)
+        (= f (quote (op lambda))) (make-function (car args) (cadr args))
+        (= (car f) (quote op)) (apply-op (cadr f) (eval-items args context))
+        (= (car f) (quote function))
+            (apply-function f (eval-items args context) context)
+        (quote UNKNOWN))))
+
+; apply the cond operator
+(bind apply-cond (lambda (args context)
+    (cond
+        (nil? args)                 (quote ())
+        (nil? (cdr args))           (eval (car args) context)
+        (eval (car args) context)   (eval (cadr args) context)
+        (apply-cond (cddr args) context))))
+
+; apply another operator
+(bind apply-op (lambda (op args)
+    (cond (nil? (cdr args)) (apply-unary-op op (car args))
+        (apply-binary-op op (car args) (cadr args)))))
+
+; apply a function
+(bind apply-function (lambda (f args context)
+    (eval (caddr f) (bind-list (cadr f) args context))))
+
+; apply an unary operator
+(bind apply-unary-op (lambda (op arg)
+    (cond
+        (= op (quote car))  (car arg)
+        (= op (quote cdr))  (cdr arg)
+        (= op (quote type)) (type arg)
+        (= op (quote cons)) (cons arg)
+        (quote UNIMPLEMENTED))))
+
+; apply a binary operator
+(bind apply-binary-op (lambda (op x y)
+    (cond
+        (= op (quote cons)) (cons x y)
+        (= op (quote =))    (= x y)
+        (= op (quote +))    (+ x y)
+        (= op (quote -))    (- x y)
+        (= op (quote *))    (* x y)
+        (= op (quote /))    (/ x y)
+        (= op (quote <))    (< x y)
+        (= op (quote >))    (> x y)
+        (quote UNIMPLEMENTED))))
+
+; initial context
+(bind initial-context (quote (
+
+    ; special
+    (bind   (op bind))
+    (quote  (op quote))
+    (cond   (op cond))
+    (lambda (op lambda))
+
+    ; binary
+    (cons   (op cons))
+    (=      (op =))
+    (+      (op +))
+    (-      (op -))
+    (*      (op *))
+    (/      (op /))
+    (<      (op <))
+    (>      (op >))
+
+    ; unary
+    (car    (op car))
+    (cdr    (op cdr))
+    (type   (op type))
+
+    ; alias
+    (eq     (op =))
+    (nil    ())
+
+    ; functions
+	(nil?   (function (ls) (= ls nil)))
+	(caar   (function (ls) (car (car ls))))
+	(cadr   (function (ls) (car (cdr ls))))
+	(cddr   (function (ls) (cdr (cdr ls))))
+	(caddr  (function (ls) (car (cddr ls))))
+	(cadar  (function (ls) (car (cdr (car ls)))))
+)))
+
+; detects bind expressions
+(bind bind-expression? (lambda (e)
+    (cond 
+        (= (type e) (quote List)) (= (car e) (quote bind))
+        (= 0 1)))) ; false
+
+; map eval
+(bind lisp (lambda (input context)
+    (cond
+        (nil? input) (quote ())
+        (bind-expression? (car input))
+            (lisp (cdr input) (eval (car input) context))
+        (cons (eval (car input) context) (lisp (cdr input) context)))))
