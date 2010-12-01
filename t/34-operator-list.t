@@ -12,7 +12,7 @@ my $pl = PerLisp->new->init;
 # empty list
 my $list = $pl->eval('(list)');
 isa_ok($list, 'PerLisp::Expr::List', 'empty list');
-ok(! defined $list->to_simple, 'empty list simplification');
+is_deeply($list->to_simple, [], 'empty list simplification');
 
 # n element list
 foreach my $n (1 .. 17) {

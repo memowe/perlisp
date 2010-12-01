@@ -47,7 +47,6 @@ sub to_string {
 
 sub to_simple {
     my $self = shift;
-    return unless @{$self->exprs};
     return [ map { $_->to_simple } @{$self->exprs} ];
 }
 
