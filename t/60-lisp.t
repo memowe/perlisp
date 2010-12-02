@@ -43,9 +43,9 @@ is($bind->to_string, '((foo 42) (bind (op bind)))', 'stringified bind');
 # eval cond
 $pl->eval("(bind cond_expr (quote
     (cond
-        (= foo  0)  (quote null)
-        (= foo 42)  (quote fortytwo)
-        (quote other))
+        (= foo  0)  'null
+        (= foo 42)  'fortytwo
+        'other)
 ))");
 foreach my $foo (0, 17, 42) {
     my $context = "((foo $foo) (= (op =)) (cond (op cond)) (quote (op quote)))";
@@ -80,9 +80,9 @@ isa_ok($return, 'PerLisp::Expr::Number', 'function return value');
 is($return->to_simple, 42, 'right function return value');
 
 # arithmetic operators
-$return = $pl->eval('(eval (quote
+$return = $pl->eval("(eval (quote
     (= 42 (* (* 2 3) (+ 3 (/ 8 (- 4 2)))))
-) (quote((= (op =)) (* (op *)) (+ (op +)) (- (op -)) (/ (op /)))))');
+) '((= (op =)) (* (op *)) (+ (op +)) (- (op -)) (/ (op /))))");
 isa_ok($return, 'PerLisp::Expr::Boolean', 'equalness result');
 is($return->to_string, 'true', 'right arithmetic calculation');
 $return = $pl->eval("(eval '(< 17 42) '((< (op <))))");
@@ -94,12 +94,12 @@ is($return->to_string, 'false', 'right less-than result');
 
 # unary operators
 my $car = $pl->eval("(eval (quote
-    (car (quote (17 42)))
+    (car '(17 42))
 ) '((car (op car)) (quote (op quote))))");
 isa_ok($car, 'PerLisp::Expr::Number', 'car of a list');
 is($car->to_simple, 17, 'right car of a list');
 my $cadr = $pl->eval("(eval (quote
-    (car (cdr (quote (17 42))))
+    (car (cdr '(17 42)))
 ) '((car (op car)) (cdr (op cdr)) (quote (op quote))))");
 isa_ok($cadr, 'PerLisp::Expr::Number', 'cadr of a list');
 is($cadr->to_simple, 42, 'right cadr of a list');
@@ -107,7 +107,7 @@ my $type = $pl->eval("(eval '(type 42) '((type (op type))))");
 isa_ok($type, 'PerLisp::Expr::Symbol', 'type of a Number');
 is($type->to_string, 'Number', 'right type of a Number');
 $type = $pl->eval("(eval (quote
-    (type (quote foo))
+    (type 'foo)
 ) '((type (op type)) (quote (op quote))))");
 isa_ok($type, 'PerLisp::Expr::Symbol', 'type of a Symbol');
 is($type->to_string, 'Symbol', 'right type of a Symbol');
@@ -127,7 +127,7 @@ $type = $pl->eval("(eval (quote
 isa_ok($type, 'PerLisp::Expr::Symbol', 'type of a Function');
 is($type->to_string, 'List', 'right type of a Function (List!)');
 $return = $pl->eval("(eval (quote
-    (= (quote ()) nil)
+    (= '() nil)
 ) '((= (op =)) (quote (op quote)) (nil ())))");
 isa_ok($return, 'PerLisp::Expr::Boolean', 'return value of =');
 is($return->to_string, 'true', 'nil = empty list');
@@ -143,19 +143,19 @@ is_deeply($return->to_simple, [42, 7], 'right return value (initial-context)');
 $return = $pl->eval("(eval '(nil? nil) initial-context)");
 isa_ok($return, 'PerLisp::Expr::Boolean', 'return value of nil?');
 is($return->to_string, 'true', 'nil? of empty list');
-my $caar = $pl->eval("(eval '(caar (quote ((1 2) 3))) initial-context)");
+my $caar = $pl->eval("(eval '(caar '((1 2) 3)) initial-context)");
 isa_ok($caar, 'PerLisp::Expr::Number', 'caar');
 is($caar->to_simple, 1, 'right caar');
-$cadr = $pl->eval("(eval '(cadr (quote ((1 2) 3))) initial-context)");
+$cadr = $pl->eval("(eval '(cadr '((1 2) 3)) initial-context)");
 isa_ok($cadr, 'PerLisp::Expr::Number', 'cadr');
 is($cadr->to_simple, 3, 'right cadr');
-my $cddr = $pl->eval("(eval '(cddr (quote (1 2 3))) initial-context)");
+my $cddr = $pl->eval("(eval '(cddr '(1 2 3)) initial-context)");
 isa_ok($cddr, 'PerLisp::Expr::List', 'cddr');
 is_deeply($cddr->to_simple, [3], 'right cddr');
-my $caddr = $pl->eval("(eval '(caddr (quote (1 2 3))) initial-context)");
+my $caddr = $pl->eval("(eval '(caddr '(1 2 3)) initial-context)");
 isa_ok($caddr, 'PerLisp::Expr::Number', 'caddr');
 is($caddr->to_simple, 3, 'right caddr');
-my $cadar = $pl->eval("(eval '(cadar (quote ((1 2) 3))) initial-context)");
+my $cadar = $pl->eval("(eval '(cadar '((1 2) 3)) initial-context)");
 isa_ok($cadar, 'PerLisp::Expr::Number', 'cadar');
 is($cadar->to_simple, 2, 'right cadar');
 
