@@ -1,5 +1,5 @@
 package PerLisp;
-use base 'PerLisp::Base';
+use PerLisp::Base -base;
 
 our $VERSION = '0.1';
 
@@ -13,13 +13,13 @@ use PerLisp::Context;
 use PerLisp::Expr::Operator;
 use PerLisp::Init;
 
-__PACKAGE__->attr(context => sub { PerLisp::Context->new });
-__PACKAGE__->attr(lexer   => sub { PerLisp::Lexer->new });
-__PACKAGE__->attr(parser  => sub { PerLisp::Parser->new });
+has context => sub { PerLisp::Context->new };
+has lexer   => sub { PerLisp::Lexer->new };
+has parser  => sub { PerLisp::Parser->new };
 
 # REPL handles
-__PACKAGE__->attr(input  => sub {IO::Handle->new->fdopen(fileno(STDIN),'r')});
-__PACKAGE__->attr(output => sub {IO::Handle->new->fdopen(fileno(STDOUT),'w')});
+has input   => sub { IO::Handle->new->fdopen(fileno(STDIN), 'r') };
+has output  => sub { IO::Handle->new->fdopen(fileno(STDOUT), 'w') };
 
 # set operators
 sub init {

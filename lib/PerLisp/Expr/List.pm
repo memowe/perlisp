@@ -1,7 +1,7 @@
 package PerLisp::Expr::List;
-use base 'PerLisp::Expr';
+use PerLisp::Base 'PerLisp::Expr';
 
-__PACKAGE__->attr(exprs => sub { [] });
+has exprs => sub { [] };
 
 sub car {
     my $self = shift;

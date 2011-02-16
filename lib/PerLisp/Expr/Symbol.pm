@@ -1,7 +1,7 @@
 package PerLisp::Expr::Symbol;
-use base 'PerLisp::Expr';
+use PerLisp::Base 'PerLisp::Expr';
 
-__PACKAGE__->attr('name');
+has 'name';
 
 sub eval {
     my ($self, $context) = @_;

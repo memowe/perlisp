@@ -1,5 +1,5 @@
 package PerLisp::Lexer;
-use base 'PerLisp::Base';
+use PerLisp::Base -base;
 
 use PerLisp::Token;
 use PerLisp::TokenStream;
@@ -39,8 +39,8 @@ sub lex {
         # number
         $string =~ s/^(-?\d+(\.\d+)?) ?// and do {
             $tokens->add(PerLisp::Token->new(
-                name => 'NUMBER',
-                attr => $1,
+                name        => 'NUMBER',
+                attribute   => $1,
             ));
             next;
         };
@@ -48,8 +48,8 @@ sub lex {
         # string
         $string =~ s/^"([^"]+)" ?// and do {
             $tokens->add(PerLisp::Token->new(
-                name => 'STRING',
-                attr => $1,
+                name        => 'STRING',
+                attribute   => $1,
             ));
             next;
         };
@@ -57,8 +57,8 @@ sub lex {
         # symbol
         $string =~ s/([^\s()]+) ?// and do {
             $tokens->add(PerLisp::Token->new(
-                name => 'SYMBOL',
-                attr => $1,
+                name        => 'SYMBOL',
+                attribute   => $1,
             ));
             next;
         };

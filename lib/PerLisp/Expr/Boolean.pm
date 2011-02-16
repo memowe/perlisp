@@ -1,7 +1,7 @@
 package PerLisp::Expr::Boolean;
-use base 'PerLisp::Expr';
+use PerLisp::Expr -base;
 
-__PACKAGE__->attr(value => 0);
+has value => 0;
 
 our $TRUE  = __PACKAGE__->new(value => 1);
 our $FALSE = __PACKAGE__->new(value => 0);

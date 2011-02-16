@@ -1,13 +1,13 @@
 package PerLisp::Token;
-use base 'PerLisp::Base';
+use PerLisp::Base -base;
 
-__PACKAGE__->attr(name => sub { die "all tokens need a name" });
-__PACKAGE__->attr('attr');
+has name => sub { die 'all tokens need a name' };
+has 'attribute';
 
 sub to_string {
     my $self = shift;
-    return $self->name unless defined $self->attr;
-    return $self->name . '(' . $self->attr . ')';
+    return $self->name unless defined $self->attribute;
+    return $self->name . '(' . $self->attribute . ')';
 }
 
 1;

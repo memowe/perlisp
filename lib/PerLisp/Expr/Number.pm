@@ -1,7 +1,7 @@
 package PerLisp::Expr::Number;
-use base 'PerLisp::Expr';
+use PerLisp::Base 'PerLisp::Expr';
 
-__PACKAGE__->attr('value');
+has 'value';
 
 sub eval {
     my ($self, $context) = @_;

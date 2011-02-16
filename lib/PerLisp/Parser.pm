@@ -1,5 +1,5 @@
 package PerLisp::Parser;
-use base 'PerLisp::Base';
+use PerLisp::Base -base;
 
 use feature 'switch';
 
@@ -50,21 +50,21 @@ sub expr {
 sub number {
     my ($self, $token) = @_;
     return PerLisp::Expr::Number->new(
-        value => $token->attr,
+        value => $token->attribute,
     );
 }
 
 sub string {
     my ($self, $token) = @_;
     return PerLisp::Expr::String->new(
-        value => $token->attr,
+        value => $token->attribute,
     );
 }
 
 sub symbol {
     my ($self, $token) = @_;
     return PerLisp::Expr::Symbol->new(
-        name => $token->attr,
+        name => $token->attribute,
     );
 }
 

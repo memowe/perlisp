@@ -1,7 +1,7 @@
 package PerLisp::Context;
-use base 'PerLisp::Base';
+use PerLisp::Base -base;
 
-__PACKAGE__->attr(binds => sub { {} });
+has binds => sub { {} };
 
 sub get {
     my ($self, $name) = @_;

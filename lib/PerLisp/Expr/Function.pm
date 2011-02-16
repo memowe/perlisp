@@ -1,9 +1,9 @@
 package PerLisp::Expr::Function;
-use base 'PerLisp::Expr';
+use PerLisp::Base 'PerLisp::Expr';
 
-__PACKAGE__->attr(params  => sub { [] });
-__PACKAGE__->attr(body    => sub { die 'no body set' });
-__PACKAGE__->attr(context => sub { die 'no context set' });
+has params  => sub { [] };
+has body    => sub { die 'no body set' };
+has context => sub { die 'no context set' };
 
 sub eval {
     my ($self, $context) = @_;

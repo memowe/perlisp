@@ -1,7 +1,7 @@
 package PerLisp::TokenStream;
-use base 'PerLisp::Base';
+use PerLisp::Base -base;
 
-__PACKAGE__->attr(tokens => sub { [] });
+has tokens => sub { [] };
 
 sub add {
     my $self = shift;

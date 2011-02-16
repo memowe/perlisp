@@ -1,8 +1,8 @@
 package PerLisp::Expr::Operator;
-use base 'PerLisp::Expr';
+use PerLisp::Base 'PerLisp::Expr';
 
-__PACKAGE__->attr(name => sub { die 'no name set' });
-__PACKAGE__->attr(code => sub { die 'no code set' });
+has name => sub { die 'no name set' };
+has code => sub { die 'no code set' };
 
 sub eval {
     my ($self, $context) = @_;

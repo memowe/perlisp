@@ -4,12 +4,41 @@ package PerLisp::Base;
 use strict;
 use warnings;
 
-# export stuff to subclasses
+# use "use" for inheritance
 sub import {
+    my ($class, $arg) = @_;
     
     # perlisp classes are strict!
     strict->import;
     warnings->import;
+
+    # inheritance wanted?
+    return unless $arg;
+
+    # preparations
+    no strict 'refs';
+    no warnings 'redefine';
+    my $caller = caller;
+
+    # subclass from PerLisp::Base
+    if ($arg eq '-base') {
+        $arg = 'PerLisp::Base';
+    }
+
+    # subclass from an other class
+    else {
+        my $filename = $arg;
+        $filename =~ s|::|/|g;
+
+        # load unless loaded
+        require "$filename.pm" unless $arg->can('new');
+    }
+
+    # inheritance
+    push @{"${caller}::ISA"}, $arg;
+
+    # export a moose like attribute helper
+    *{"${caller}::has"} = sub { attr($caller, @_) };
 }
 
 # basic constructor
