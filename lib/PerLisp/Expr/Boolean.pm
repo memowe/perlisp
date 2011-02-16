@@ -1,9 +1,6 @@
 package PerLisp::Expr::Boolean;
 use base 'PerLisp::Expr';
 
-use strict;
-use warnings;
-
 __PACKAGE__->attr(value => 0);
 
 our $TRUE  = __PACKAGE__->new(value => 1);

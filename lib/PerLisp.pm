@@ -3,9 +3,6 @@ use base 'PerLisp::Base';
 
 our $VERSION = '0.1';
 
-use strict;
-use warnings;
-
 use IO::Handle;
 use File::Slurp 'slurp';
 use PerLisp::Operators;

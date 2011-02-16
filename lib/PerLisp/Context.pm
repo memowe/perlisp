@@ -1,9 +1,6 @@
 package PerLisp::Context;
 use base 'PerLisp::Base';
 
-use strict;
-use warnings;
-
 __PACKAGE__->attr(binds => sub { {} });
 
 sub get {

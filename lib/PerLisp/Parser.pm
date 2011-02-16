@@ -1,8 +1,6 @@
 package PerLisp::Parser;
 use base 'PerLisp::Base';
 
-use strict;
-use warnings;
 use feature 'switch';
 
 use PerLisp::Expr::Number;

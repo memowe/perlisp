@@ -1,4 +1,5 @@
 package PerLisp::Init;
+# not a class but a package
 
 use strict;
 use warnings;

@@ -1,9 +1,6 @@
 package PerLisp::Expr::Function;
 use base 'PerLisp::Expr';
 
-use strict;
-use warnings;
-
 __PACKAGE__->attr(params  => sub { [] });
 __PACKAGE__->attr(body    => sub { die 'no body set' });
 __PACKAGE__->attr(context => sub { die 'no context set' });

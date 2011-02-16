@@ -1,9 +1,6 @@
 package PerLisp::Expr::Operator;
 use base 'PerLisp::Expr';
 
-use strict;
-use warnings;
-
 __PACKAGE__->attr(name => sub { die 'no name set' });
 __PACKAGE__->attr(code => sub { die 'no code set' });
 

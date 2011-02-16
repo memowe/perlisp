@@ -1,9 +1,6 @@
 package PerLisp::Expr::List;
 use base 'PerLisp::Expr';
 
-use strict;
-use warnings;
-
 __PACKAGE__->attr(exprs => sub { [] });
 
 sub car {

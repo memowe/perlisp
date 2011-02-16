@@ -1,9 +1,6 @@
 package PerLisp::Expr;
 use base 'PerLisp::Base';
 
-use strict;
-use warnings;
-
 sub eval {
     my ($self, $context) = @_;
     die 'override!';

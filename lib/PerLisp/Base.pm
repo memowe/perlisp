@@ -4,6 +4,14 @@ package PerLisp::Base;
 use strict;
 use warnings;
 
+# export stuff to subclasses
+sub import {
+    
+    # perlisp classes are strict!
+    strict->import;
+    warnings->import;
+}
+
 # basic constructor
 sub new {
     my $class = shift;

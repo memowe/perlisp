@@ -1,9 +1,6 @@
 package PerLisp::Lexer;
 use base 'PerLisp::Base';
 
-use strict;
-use warnings;
-
 use PerLisp::Token;
 use PerLisp::TokenStream;
 

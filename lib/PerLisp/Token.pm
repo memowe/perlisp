@@ -1,9 +1,6 @@
 package PerLisp::Token;
 use base 'PerLisp::Base';
 
-use strict;
-use warnings;
-
 __PACKAGE__->attr(name => sub { die "all tokens need a name" });
 __PACKAGE__->attr('attr');
 

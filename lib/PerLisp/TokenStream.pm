@@ -1,9 +1,6 @@
 package PerLisp::TokenStream;
 use base 'PerLisp::Base';
 
-use strict;
-use warnings;
-
 __PACKAGE__->attr(tokens => sub { [] });
 
 sub add {

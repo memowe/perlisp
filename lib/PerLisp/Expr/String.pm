@@ -1,9 +1,6 @@
 package PerLisp::Expr::String;
 use base 'PerLisp::Expr';
 
-use strict;
-use warnings;
-
 __PACKAGE__->attr('value');
 
 sub eval {

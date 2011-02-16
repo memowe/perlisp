@@ -1,9 +1,6 @@
 package PerLisp::Expr::Symbol;
 use base 'PerLisp::Expr';
 
-use strict;
-use warnings;
-
 __PACKAGE__->attr('name');
 
 sub eval {
