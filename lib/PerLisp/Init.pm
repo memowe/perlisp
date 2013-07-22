@@ -11,7 +11,7 @@ __DATA__
 ; "the" true
 (bind true (= 1 1))
 
-; "tre" false
+; "the" false
 (bind false (not true))
 
 ; (not) equal aliases
