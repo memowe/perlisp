@@ -1,5 +1,5 @@
 package PerLisp::Parser;
-use Mo;
+use PerLisp::Mo;
 
 use feature 'switch';
 

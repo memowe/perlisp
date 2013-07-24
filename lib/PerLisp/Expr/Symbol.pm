@@ -1,5 +1,5 @@
 package PerLisp::Expr::Symbol;
-use Mo;
+use PerLisp::Mo;
 
 extends 'PerLisp::Expr';
 

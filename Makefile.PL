@@ -22,7 +22,7 @@ WriteMakefile(
         'IO::Handle'    => '1.28',
 
         # non core modules
-        'Mo'            => '0.35',
+        #'Mo'            => '0.35', # inlined!
     },
     EXE_FILES => ['perlisp'],
 );

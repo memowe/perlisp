@@ -1,5 +1,5 @@
 package PerLisp::Token;
-use Mo 'required';
+use PerLisp::Mo 'required';
 
 has name        => (required => 1);
 has attribute   => ();

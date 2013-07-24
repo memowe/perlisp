@@ -1,5 +1,5 @@
 package PerLisp::TokenStream;
-use Mo 'default';
+use PerLisp::Mo 'default';
 
 has tokens => (default => sub { [] });
 

@@ -1,5 +1,5 @@
 package PerLisp::Context;
-use Mo 'default';
+use PerLisp::Mo 'default';
 
 has binds => (default => sub { {} });
 

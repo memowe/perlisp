@@ -1,5 +1,5 @@
 package PerLisp::Expr::Operator;
-use Mo 'required';
+use PerLisp::Mo 'required';
 
 extends 'PerLisp::Expr';
 

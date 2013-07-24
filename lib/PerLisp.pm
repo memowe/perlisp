@@ -1,5 +1,5 @@
 package PerLisp;
-use Mo 'default';
+use PerLisp::Mo 'default';
 
 our $VERSION = '0.1';
 

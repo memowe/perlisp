@@ -1,5 +1,5 @@
 package PerLisp::Expr::Number;
-use Mo;
+use PerLisp::Mo;
 
 extends 'PerLisp::Expr';
 

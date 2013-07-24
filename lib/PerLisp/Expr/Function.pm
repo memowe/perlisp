@@ -1,5 +1,5 @@
 package PerLisp::Expr::Function;
-use Mo qw(default required);
+use PerLisp::Mo qw(default required);
 
 extends 'PerLisp::Expr';
 

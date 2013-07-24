@@ -1,5 +1,5 @@
 package PerLisp::Expr::Boolean;
-use Mo 'default';
+use PerLisp::Mo 'default';
 
 extends 'PerLisp::Expr';
 

@@ -1,5 +1,5 @@
 package PerLisp::Expr;
-use Mo;
+use PerLisp::Mo;
 
 sub eval {
     my ($self, $context) = @_;
