@@ -1,10 +1,11 @@
 package PerLisp::Expr::Operator;
-use PerLisp::Mo 'required';
+use PerLisp::Mo qw(required default);
 
 extends 'PerLisp::Expr';
 
-has name => (required => 1);
-has code => (required => 1);
+has name    => (required => 1);
+has code    => (required => 1);
+has tracer  => (); # a tracer code ref
 
 sub eval {
     my ($self, $context) = @_;

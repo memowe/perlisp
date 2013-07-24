@@ -6,6 +6,7 @@ extends 'PerLisp::Expr';
 has params  => (default  => sub { [] });
 has body    => (required => 1);
 has context => (required => 1);
+has tracer  => (); # a tracer code ref
 
 sub eval {
     my ($self, $context) = @_;
