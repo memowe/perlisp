@@ -1,10 +1,9 @@
 package PerLisp;
-use PerLisp::Base -base;
+use Mo 'default';
 
 our $VERSION = '0.1';
 
 use IO::Handle;
-use File::Slurp 'slurp';
 use PerLisp::Operators;
 use PerLisp::Operators::Arithmetic;
 use PerLisp::Lexer;
@@ -13,13 +12,13 @@ use PerLisp::Context;
 use PerLisp::Expr::Operator;
 use PerLisp::Init;
 
-has context => sub { PerLisp::Context->new };
-has lexer   => sub { PerLisp::Lexer->new };
-has parser  => sub { PerLisp::Parser->new };
+has context => (default => sub { PerLisp::Context->new });
+has lexer   => (default => sub { PerLisp::Lexer->new });
+has parser  => (default => sub { PerLisp::Parser->new });
 
 # REPL handles
-has input   => sub { IO::Handle->new->fdopen(fileno(STDIN), 'r') };
-has output  => sub { IO::Handle->new->fdopen(fileno(STDOUT), 'w') };
+has input   => (default => sub { IO::Handle->new->fdopen(fileno(STDIN), 'r') });
+has output  => (default => sub { IO::Handle->new->fdopen(fileno(STDOUT),'w') });
 
 # set operators
 sub init {
@@ -91,11 +90,13 @@ sub init {
                 unless $filename->isa('PerLisp::Expr::String');
             my $fn = $filename->value;
 
-            # existance and readability check
-            die "File isn't readable: $fn.\n" unless -e -r $fn;
+            # readability check
+            die "File isn't readable: $fn.\n" unless -r $fn;
 
             # slurp + eval
-            my $perlisp = slurp $fn;
+            open my $fh, '<', $fn or die "couldn't open $fn: $!\n";
+            my $perlisp = do { local $/; <$fh> };
+            close $fh;
             $self->eval($perlisp);
 
             # return nothing
@@ -228,7 +229,7 @@ Creates some kind of a PerLisp shell.
 
 =head1 AUTHOR, LICENSE, BUGS
 
-Copyright (c) 2010 Mirko Westermeier, <mirko@westermeier.de>
+Copyright (c) 2010-2013 Mirko Westermeier, <mirko@westermeier.de>
 
 This software is released under the MIT license (view MIT-LICENSE for details).
 

@@ -1,8 +1,8 @@
 package PerLisp::Token;
-use PerLisp::Base -base;
+use Mo 'required';
 
-has name => sub { die 'all tokens need a name' };
-has 'attribute';
+has name        => (required => 1);
+has attribute   => ();
 
 sub to_string {
     my $self = shift;

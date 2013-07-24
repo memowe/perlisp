@@ -2,21 +2,27 @@ use strict;
 use warnings;
 use ExtUtils::MakeMaker;
 
-use 5.10.0;
-
 WriteMakefile(
     NAME                => 'PerLisp',
-    AUTHOR              => 'Mirko Westermeier <mirko@westermeier.de>',
     VERSION_FROM        => 'lib/PerLisp.pm',
-    ($ExtUtils::MakeMaker::VERSION >= 6.3002
-      ? ('LICENSE'=> 'mit')
-      : ()),
-    EXE_FILES => ['perlisp'],
-    PREREQ_PM => {
-        'Test::More'    => 0,
-        'IO::Handle'    => 0,
-        'File::Slurp'   => 0,
+    ABSTRACT            => 'A simple Lisp interpreter, written in Perl',
+    AUTHOR              => 'Mirko Westermeier <mirko@westermeier.de>',
+    LICENSE             => 'mit',
+    META_MERGE          => {
+        resources   => {
+            repository  => 'https://github.com/memowe/perlisp',
+            bugtracker  => 'https://github.com/memowe/perlisp/issues',
+        },
     },
-    dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean               => { FILES => 'PerLisp-*' },
+    MIN_PERL_VERSION    => '5.10.1',
+    PREREQ_PM => {
+
+        # core modules
+        'Test::More'    => '0.92',
+        'IO::Handle'    => '1.28',
+
+        # non core modules
+        'Mo'            => '0.35',
+    },
+    EXE_FILES => ['perlisp'],
 );

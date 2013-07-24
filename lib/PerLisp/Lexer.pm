@@ -1,5 +1,5 @@
 package PerLisp::Lexer;
-use PerLisp::Base -base;
+use Mo;
 
 use PerLisp::Token;
 use PerLisp::TokenStream;

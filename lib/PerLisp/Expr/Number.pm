@@ -1,5 +1,7 @@
 package PerLisp::Expr::Number;
-use PerLisp::Base 'PerLisp::Expr';
+use Mo;
+
+extends 'PerLisp::Expr';
 
 has 'value';
 

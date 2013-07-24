@@ -1,9 +1,11 @@
 package PerLisp::Expr::Function;
-use PerLisp::Base 'PerLisp::Expr';
+use Mo qw(default required);
 
-has params  => sub { [] };
-has body    => sub { die 'no body set' };
-has context => sub { die 'no context set' };
+extends 'PerLisp::Expr';
+
+has params  => (default  => sub { [] });
+has body    => (required => 1);
+has context => (required => 1);
 
 sub eval {
     my ($self, $context) = @_;

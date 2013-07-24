@@ -4,7 +4,6 @@ use strict;
 use warnings;
 
 use Test::More;
-use File::Slurp 'slurp';
 
 # this test may be slow, so disable it by default
 plan skip_all => 'set LISPLISP to enable this test (slow and deep recursion)'
@@ -33,7 +32,9 @@ isa_ok($values, 'PerLisp::Expr::List', 'lisp value list');
 is_deeply($values->to_string, '(42 42 false 42)', 'right lisp value list');
 
 # load the lisplisp file
-my $lisp = slurp $filename;
+open my $fh, '<', $filename or die "couldn't open $filename: $!\n";
+my $lisp = do { local $/; <$fh> };
+close $fh;
 
 # lisp in lisp
 $values = $pl->eval("(lisp (quote (

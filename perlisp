@@ -7,7 +7,6 @@ use FindBin '$Bin';
 use lib "$Bin/lib";
 
 use PerLisp;
-use File::Slurp 'slurp';
 
 # init
 my $pl = PerLisp->new->init;

@@ -1,8 +1,10 @@
 package PerLisp::Expr::Operator;
-use PerLisp::Base 'PerLisp::Expr';
+use Mo 'required';
 
-has name => sub { die 'no name set' };
-has code => sub { die 'no code set' };
+extends 'PerLisp::Expr';
+
+has name => (required => 1);
+has code => (required => 1);
 
 sub eval {
     my ($self, $context) = @_;

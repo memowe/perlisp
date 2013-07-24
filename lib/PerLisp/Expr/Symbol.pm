@@ -1,5 +1,7 @@
 package PerLisp::Expr::Symbol;
-use PerLisp::Base 'PerLisp::Expr';
+use Mo;
+
+extends 'PerLisp::Expr';
 
 has 'name';
 
