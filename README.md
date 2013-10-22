@@ -3,8 +3,8 @@ PerLisp
 
 This is a simple statically scoped Lisp interpreter, written in Perl. During
 the lecture "Structure and Interpretation of Programming Languages", held by
-Achim Clausing (WWU Münster, Germany), I needed to try out diffent things, so I
-wrote this.
+Achim Clausing (WWU Münster, Germany), I needed to try out different things,
+so I wrote this.
 
 **DISCLAIMER** This is **not** production ready. I use it to play around and
 I think there are many bugs lurking around. You have been warned! :-)

@@ -1,7 +1,7 @@
 package PerLisp::Context;
 use PerLisp::Mo 'default';
 
-has binds => (default => sub { {} });
+has binds => {};
 
 sub get {
     my ($self, $name) = @_;

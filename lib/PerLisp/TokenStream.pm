@@ -1,7 +1,7 @@
 package PerLisp::TokenStream;
 use PerLisp::Mo 'default';
 
-has tokens => (default => sub { [] });
+has tokens => [];
 
 sub add {
     my $self = shift;

@@ -3,7 +3,7 @@ use PerLisp::Mo 'default';
 
 extends 'PerLisp::Expr';
 
-has value => (default => sub {0});
+has value => 0;
 
 our $TRUE  = __PACKAGE__->new(value => 1);
 our $FALSE = __PACKAGE__->new(value => 0);

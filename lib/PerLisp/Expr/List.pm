@@ -3,7 +3,7 @@ use PerLisp::Mo 'default';
 
 extends 'PerLisp::Expr';
 
-has exprs => (default => sub { [] });
+has exprs => [];
 
 sub car {
     my $self = shift;

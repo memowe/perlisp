@@ -12,13 +12,13 @@ use PerLisp::Context;
 use PerLisp::Expr::Operator;
 use PerLisp::Init;
 
-has context => (default => sub { PerLisp::Context->new });
-has lexer   => (default => sub { PerLisp::Lexer->new });
-has parser  => (default => sub { PerLisp::Parser->new });
+has context => PerLisp::Context->new;
+has lexer   => PerLisp::Lexer->new;
+has parser  => PerLisp::Parser->new;
 
 # REPL handles
-has input   => (default => sub { IO::Handle->new->fdopen(fileno(STDIN), 'r') });
-has output  => (default => sub { IO::Handle->new->fdopen(fileno(STDOUT),'w') });
+has input   => IO::Handle->new->fdopen(fileno(STDIN), 'r');
+has output  => IO::Handle->new->fdopen(fileno(STDOUT),'w');
 
 # trace log callback
 has tracer  => (default => sub { my $self = shift; sub {
@@ -226,7 +226,7 @@ PerLisp
 
 This is a simple statically scoped Lisp interpreter. During the lecture
 "Structure and Interpretation of Programming Languages", held by Achim Clausing
-(WWU Münster, Germany), I needed to try out diffent things, so I wrote this.
+(WWU Münster, Germany), I needed to try out different things, so I wrote this.
 
 See the file README.md in the PerLisp distribution for a quick start guide.
 
