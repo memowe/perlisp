@@ -30,7 +30,7 @@ sub eval {
     # eval function expression
     my $function = $fn_expr->eval($context);
 
-    # check applyability (duck typing)
+    # check apply-ability (duck typing)
     die $fn_expr->to_string . " can't be applied.\n"
         unless $function->can('apply');
 
