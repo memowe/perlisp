@@ -23,6 +23,7 @@ WriteMakefile(
 
         # non core modules
         #'Mo'            => '0.35', # inlined!
+        'experimental'  => '0.007',
     },
     EXE_FILES => ['perlisp'],
 );

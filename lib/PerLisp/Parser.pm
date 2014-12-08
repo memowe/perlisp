@@ -1,7 +1,7 @@
 package PerLisp::Parser;
 use PerLisp::Mo;
 
-use feature 'switch';
+use experimental 'switch';
 
 use PerLisp::Expr::Number;
 use PerLisp::Expr::String;
