@@ -283,7 +283,7 @@ Creates some kind of a PerLisp shell.
 
 =head1 AUTHOR, LICENSE, BUGS
 
-Copyright (c) 2010-2013 Mirko Westermeier, <mirko@westermeier.de>
+Copyright (c) 2010-2014 Mirko Westermeier, <mirko@westermeier.de>
 
 This software is released under the MIT license (view MIT-LICENSE for details).
 

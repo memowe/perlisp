@@ -74,7 +74,7 @@ readable (even if you don't know much Perl).
 Author, bug reports, license
 ----------------------------
 
-Copyright (c) 2010-2013 Mirko Westermeier, <mirko@westermeier.de>
+Copyright (c) 2010-2014 Mirko Westermeier, <mirko@westermeier.de>
 
 This software is released under the MIT license (view MIT-LICENSE for details).
 If you found a bug, please contact me via mail or github. You can also use
