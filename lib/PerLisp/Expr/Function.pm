@@ -32,21 +32,22 @@ sub to_simple {
 sub apply {
     my ($self, $context, $args) = @_;
 
-    # check arity
+    # check arity: die if too many arguments
     my $arity = @{$self->params};
-    die "can't apply: $arity params expected.\n"
-        unless @$args == $arity;
+    die "can't apply: too many arguments.\n"
+        if @$args > $arity;
 
-    # create local param bindings
+    # try to match arguments and parameters to create local param bindings
     my %binds;
-    foreach my $param (@{$self->params}) {
-        
+    my @params = @{$self->params};
+    foreach my $arg (@$args) {
+
         # eval argument
-        my $arg = shift @$args;
         my $val = $arg->eval($context);
 
         # bind
-        $binds{$param} = $val;
+        my $param       = shift @params;
+        $binds{$param}  = $val;
     }
 
     # static scope
@@ -55,7 +56,17 @@ sub apply {
     # specialize context
     my $local_context = $context->specialize(\%binds);
 
-    # eval the body with new bindings
+    # remaining parameters? return a curried version
+    if (@params) {
+        return PerLisp::Expr::Function->new(
+            params  => \@params,
+            body    => $self->body,
+            context => $local_context,
+            tracer  => $self->tracer,
+        );
+    }
+
+    # exact match: eval the body with new bindings
     return $self->body->eval($local_context);
 }
 
