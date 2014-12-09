@@ -34,22 +34,8 @@ sub eval {
     die $fn_expr->to_string . " can't be applied.\n"
         unless $function->can('apply');
 
-    # call trace
-    my $ctrace = '(' . join(' ' => map { $_->to_string } $fn_expr, @args) . ')';
-    $function->tracer->("\tCall\t$ctrace")
-        if $function->tracer;
-
     # apply
-    my $ret_val = $function->apply($context, \@args);
-
-    # return trace
-    my $ret_val_str = ref($ret_val) ? $ret_val->to_string : $ret_val // '';
-    my $rtrace = $ret_val_str . " from $ctrace";
-    $function->tracer->("\tReturn\t$rtrace")
-        if $function->tracer;
-
-    # done
-    return $ret_val;
+    return $function->apply($context, \@args);
 }
 
 sub to_string {

@@ -20,12 +20,6 @@ has parser  => PerLisp::Parser->new;
 has input   => IO::Handle->new->fdopen(fileno(STDIN), 'r');
 has output  => IO::Handle->new->fdopen(fileno(STDOUT),'w');
 
-# trace log callback
-has tracer  => (default => sub { my $self = shift; sub {
-    my $str = shift;
-    $self->output->print($str . "\n");
-}});
-
 # set operators
 sub init {
     my $self = shift;
@@ -110,52 +104,6 @@ sub init {
         },
     ));
 
-    # trace operator: add a trace to functions and operators
-    $self->context->set(trace => PerLisp::Expr::Operator->new(
-        name => 'trace',
-        code => sub {
-            my ($context, @symbols) = @_;
-
-            # lookup
-            my @fn_exprs = map { $context->get($_->name) } @symbols;
-
-            # check traceability (duck typing)
-            for my $fn_expr (@fn_exprs) {
-                die $fn_expr->to_string . " isn't traceable.\n"
-                    unless $fn_expr->can('tracer');
-            }
-
-            # activate trace
-            $_->tracer($self->tracer) for @fn_exprs;
-
-            # return summary
-            return 'traced: ' . join ', ' => map { $_->name } @symbols;
-        },
-    ));
-
-    # untrace operator: remove a trace from functions and operators
-    $self->context->set(untrace => PerLisp::Expr::Operator->new(
-        name => 'untrace',
-        code => sub {
-            my ($context, @symbols) = @_;
-
-            # lookup
-            my @fn_exprs = map { $context->get($_->name) } @symbols;
-
-            # check traceability (duck typing)
-            for my $fn_expr (@fn_exprs) {
-                die $fn_expr->to_string . " isn't traceable.\n"
-                    unless $fn_expr->can('tracer');
-            }
-
-            # deactivate trace
-            $_->tracer(undef) for @fn_exprs;
-
-            # return summary
-            return 'untraced: ' . join ', ' => map { $_->name } @symbols;
-        },
-    ));
-
     # init definitions
     $self->eval($PerLisp::Init::definitions);
 
@@ -190,10 +138,8 @@ sub read_eval_print_loop {
 
         # try to eval and print
         eval {
-            for my $val ($self->eval($line, $self->context)) {
-                my $val_str = ref($val) ? $val->to_string : $val // '';
-                $self->output->print($val_str . "\n");
-            }
+            my @values = $self->eval($line, $self->context);
+            $self->output->print($_->to_string . "\n") for @values;
         };
 
         # catch errors

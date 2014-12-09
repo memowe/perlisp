@@ -6,7 +6,6 @@ extends 'PerLisp::Expr';
 has params  => [];
 has body    => (required => 1);
 has context => (required => 1);
-has tracer  => (); # a tracer code ref
 
 sub eval {
     my ($self, $context) = @_;
@@ -78,7 +77,6 @@ sub apply {
             params  => \@params,
             body    => $self->body,
             context => $local_context,
-            tracer  => $self->tracer,
         );
     }
 
