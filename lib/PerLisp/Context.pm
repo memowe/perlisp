@@ -3,6 +3,11 @@ use PerLisp::Mo 'default';
 
 has binds => {};
 
+sub bound {
+    my ($self, $name) = @_;
+    return exists $self->binds->{$name};
+}
+
 sub get {
     my ($self, $name) = @_;
 
