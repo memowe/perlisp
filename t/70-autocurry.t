@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 
 use PerLisp;
 
@@ -12,13 +12,19 @@ my $pl = PerLisp->new->init;
 # simple two parameter function
 my $fun = $pl->eval('(lambda (a b) (* a b))');
 isa_ok($fun, 'PerLisp::Expr::Function', 'lambda value');
-is_deeply($fun->params, ['a', 'b'], 'right parameter list');
+is($fun->to_string_bound($pl->context),
+    'Function: (a b) -> (* a b)',
+    'right function',
+);
 
 # bind the function to a name
 $pl->context->set(mult => $fun);
 my $curry_fun = $pl->eval('(mult 6)');
 isa_ok($curry_fun, 'PerLisp::Expr::Function', 'lambda value');
-is_deeply($curry_fun->params, ['b'], 'right parameter list');
+is($curry_fun->to_string_bound($pl->context),
+    'Function: (b) -> (* 6 b)',
+    'right closure',
+);
 
 # bind the curried function to a name
 $pl->context->set(mult6 => $curry_fun);
@@ -31,15 +37,17 @@ is($pl->eval('(eq (mult 17 42) ((mult 17) 42))')->to_simple, 'true', 'equal');
 
 # build sum and product of lists from curried reduce
 $pl->eval('(bind sum (reduce + 0))');
+is($pl->eval('sum')->to_string_bound($pl->context),
+    'Function: (l) -> (cond (nil? l) 0 (+ (car l) (reduce + 0 (cdr l))))',
+    'right closure',
+);
 is($pl->eval('(sum (list 9 10 11 12))')->to_simple, 42, 'right sum');
 $pl->eval('(bind prod (reduce * 1))');
-is($pl->eval('(prod (list 7 2 3))')->to_simple, 42, 'right product');
-
-# build odd-filter from curried filter
-$pl->eval('(bind odd-filter (filter (lambda (x) (= 1 (% x 2)))))');
-is_deeply($pl->eval('(odd-filter (list 17 42 37 666 999))')->to_simple,
-    [17, 37, 999], 'right filtered list'
+is($pl->eval('prod')->to_string_bound($pl->context),
+    'Function: (l) -> (cond (nil? l) 1 (* (car l) (reduce * 1 (cdr l))))',
+    'right closure',
 );
+is($pl->eval('(prod (list 7 2 3))')->to_simple, 42, 'right product');
 
 # just to be sure: too many arguments
 eval { $pl->eval('(mult 1 2 3)'); die 'no exception thrown'; };

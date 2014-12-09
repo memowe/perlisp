@@ -19,8 +19,18 @@ sub to_string_bound {
     my ($self, $context) = @_;
 
     # bound?
-    return $self->eval($context)->to_string_bound($context)
-        if $context->bound($self->name);
+    if ($context->bound($self->name)) {
+
+        # get value
+        my $val = $self->eval($context);
+
+        # isa Function? no replacement!
+        return $self->name
+            if $val->isa('PerLisp::Expr::Function');
+
+        # no Function? to_string_bound!
+        return $val->to_string_bound($context);
+    }
 
     # unbound
     return $self->to_string;
@@ -35,8 +45,18 @@ sub to_simple_bound {
     my ($self, $context) = @_;
 
     # bound?
-    return $self->eval($context)->to_simple_bound($context)
-        if $context->bound($self->name);
+    if ($context->bound($self->name)) {
+
+        # get value
+        my $val = $self->eval($context);
+
+        # isa Function? no replacement!
+        return $self->name
+            if $val->isa('PerLisp::Expr::Function');
+
+        # no Function? to_simple_bound!
+        return $val->to_simple_bound($context);
+    }
 
     # unbound
     return $self->to_simple;

@@ -138,8 +138,10 @@ sub read_eval_print_loop {
 
         # try to eval and print
         eval {
-            my @values = $self->eval($line, $self->context);
-            $self->output->print($_->to_string . "\n") for @values;
+            for my $value ($self->eval($line, $self->context)) {
+                my $output = $value->to_string_bound($self->context);
+                $self->output->print("$output\n");
+            }
         };
 
         # catch errors

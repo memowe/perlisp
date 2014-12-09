@@ -22,7 +22,7 @@ sub to_string {
 sub to_string_bound {
     my ($self, $context) = @_;
     my $param_string = '(' . join(' ' => @{$self->params}) . ')';
-    my $body_string  = $self->body->to_string_bound($context);
+    my $body_string  = $self->body->to_string_bound($self->context);
     return 'Function: ' . $param_string . ' -> ' . $body_string;
 }
 
@@ -39,7 +39,7 @@ sub to_simple_bound {
     my ($self, $context) = @_;
     return {function => {
         params  => $self->params,
-        body    => $self->body->to_simple_bound($context),
+        body    => $self->body->to_simple_bound($self->context),
         context => $self->context->binds,
     }};
 }
