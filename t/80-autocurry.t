@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 8;
+use Test::More tests => 11;
 
 use PerLisp;
 
@@ -28,6 +28,18 @@ is($val->to_simple, 42, 'right number value');
 
 # directly apply
 is($pl->eval('(eq (mult 17 42) ((mult 17) 42))')->to_simple, 'true', 'equal');
+
+# build sum and product of lists from curried reduce
+$pl->eval('(bind sum (reduce + 0))');
+is($pl->eval('(sum (list 9 10 11 12))')->to_simple, 42, 'right sum');
+$pl->eval('(bind prod (reduce * 1))');
+is($pl->eval('(prod (list 7 2 3))')->to_simple, 42, 'right product');
+
+# build odd-filter from curried filter
+$pl->eval('(bind odd-filter (filter (lambda (x) (= 1 (% x 2)))))');
+is_deeply($pl->eval('(odd-filter (list 17 42 37 666 999))')->to_simple,
+    [17, 37, 999], 'right filtered list'
+);
 
 # just to be sure: too many arguments
 eval { $pl->eval('(mult 1 2 3)'); die 'no exception thrown'; };
