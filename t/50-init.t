@@ -97,12 +97,12 @@ is_deeply(
 );
 
 # reduce: sum
-$pl->eval('(define (sum l) (reduce + l 0))');
+$pl->eval('(define (sum l) (reduce + 0 l))');
 is($pl->eval("(sum '(1 -1))")->to_string, 0, 'reduce: sum');
 is($pl->eval('(sum to-ten)')->to_string, 55, 'reduce: sum');
 
 # reduce: product
-$pl->eval('(define (product l) (reduce * l 1))');
+$pl->eval('(define (product l) (reduce * 1 l))');
 is($pl->eval("(product '(0 1 2 3 42))")->to_string, 0, 'reduce: product');
 is($pl->eval('(product to-ten)')->to_string, 3628800, 'reduce: product');
 

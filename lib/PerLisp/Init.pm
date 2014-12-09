@@ -78,6 +78,6 @@ __DATA__
         (cons (car l) (filter f (cdr l)))))
 
 ; reduce (reduce a list with a dyadic function and a neutral element)
-(define (reduce f l neutral)
+(define (reduce f neutral l)
     (cond (nil? l) neutral
-        (f (car l) (reduce f (cdr l) neutral))))
+        (f (car l) (reduce f neutral (cdr l)))))
