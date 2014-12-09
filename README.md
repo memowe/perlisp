@@ -45,11 +45,11 @@ while the interpreter starts.
 
 Start typing something like this:
 
-> `(+ 17 25)`
-> **42**
-> `(define (square x) (* x x))`
-> **Function: (x) -> (* x x)**
-> `(square 42)`
+> `(+ 17 25)`  
+> **42**  
+> `(define (square x) (* x x))`  
+> **Function: (x) -> (* x x)**  
+> `(square 42)`  
 > **1764**
 
 You can find more inspirations from `PerLisp::Init` and the tests, especially
@@ -63,9 +63,9 @@ for the remaining arguments automagically. It's super-easy to define useful
 functions using autocurryfication in combination with some well known higher
 order functions:
 
-> `(bind product (reduce * 1))`
-> **Function: (l) -> (cond (nil? l) 1 (* (car l) (reduce * 1 (cdr l))))**
-> `(product (list 2 7 3))`
+> `(bind product (reduce * 1))`  
+> **Function: (l) -> (cond (nil? l) 1 (* (car l) (reduce * 1 (cdr l))))**  
+> `(product (list 2 7 3))`  
 > **42**
 
 * PerLisp is able to interpret a simple Lisp interpreter written in Lisp which
