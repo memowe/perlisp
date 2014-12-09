@@ -20,11 +20,27 @@ sub to_string {
     return 'Function: ' . $param_string . ' -> ' . $body_string;
 }
 
+sub to_string_bound {
+    my ($self, $context) = @_;
+    my $param_string = '(' . join(' ' => @{$self->params}) . ')';
+    my $body_string  = $self->body->to_string_bound($context);
+    return 'Function: ' . $param_string . ' -> ' . $body_string;
+}
+
 sub to_simple {
     my $self = shift;
     return {function => {
         params  => $self->params,
         body    => $self->body->to_simple,
+        context => $self->context->binds,
+    }};
+}
+
+sub to_simple_bound {
+    my ($self, $context) = @_;
+    return {function => {
+        params  => $self->params,
+        body    => $self->body->to_simple_bound($context),
         context => $self->context->binds,
     }};
 }

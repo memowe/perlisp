@@ -24,8 +24,7 @@ my @operators = qw(
 # right stringifications
 foreach my $operator (@operators) {
     is(
-        $pl->context->get($operator)->to_string,
-        "Operator[$operator]",
+        $pl->context->get($operator)->to_string, $operator,
         "right operator $operator stringification",
     );
 }

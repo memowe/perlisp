@@ -14,12 +14,22 @@ sub eval {
 
 sub to_string {
     my $self = shift;
-    return 'Operator[' . $self->name . ']';
+    return $self->name;
+}
+
+sub to_string_bound {
+    my ($self, $context) = @_;
+    return $self->to_string;
 }
 
 sub to_simple {
     my $self = shift;
     return {operator => $self->name};
+}
+
+sub to_simple_bound {
+    my ($self, $context) = @_;
+    return $self->to_simple;
 }
 
 sub apply {

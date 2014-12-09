@@ -58,9 +58,20 @@ sub to_string {
     return '(' . join(' ' => @expr_strings) . ')';
 }
 
+sub to_string_bound {
+    my ($self, $context) = @_;
+    my @expr_strings = map { $_->to_string_bound($context) } @{$self->exprs};
+    return '(' . join(' ' => @expr_strings) . ')';
+}
+
 sub to_simple {
     my $self = shift;
     return [ map { $_->to_simple } @{$self->exprs} ];
+}
+
+sub to_simple_bound {
+    my ($self, $context) = @_;
+    return [ map { $_->to_simple_bound($context) } @{$self->exprs} ];
 }
 
 1;
