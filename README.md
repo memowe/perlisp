@@ -1,5 +1,4 @@
-PerLisp
-=======
+# PerLisp [![Build Status](https://travis-ci.org/memowe/perlisp.svg?branch=master)](https://travis-ci.org/memowe/perlisp)
 
 This is a simple statically scoped Lisp interpreter, written in Perl. During the
 lecture "Structure and Interpretation of Programming Languages", held by Achim
