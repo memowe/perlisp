@@ -3,6 +3,8 @@ before_script:
     - make
 
 run_test_suite:
+    tags:
+        - perl
     stage: test
     script:
         - make test
