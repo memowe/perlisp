@@ -1,0 +1,9 @@
+before_script:
+    - perl Makefile.PL
+    - make
+
+run_test_suite:
+    stage: test
+    script:
+        - make test
+        - make realclean
