@@ -92,7 +92,7 @@ readable (even if you don't know much Perl).
 Author, bug reports, license
 ----------------------------
 
-Copyright (c) 2010-2014 Mirko Westermeier, <mirko@westermeier.de>
+Copyright (c) Mirko Westermeier, <mirko@westermeier.de>
 
 This software is released under the MIT license (view MIT-LICENSE for details).
 
