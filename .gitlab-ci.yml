@@ -1,11 +1,8 @@
-before_script:
-    - perl Makefile.PL
-    - make
-
 run_test_suite:
     tags:
         - perl
     stage: test
     script:
+        - cpanm --installdeps --notest .
+        - perl Makefile.PL
         - make test
-        - make realclean
