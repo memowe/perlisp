@@ -57,7 +57,7 @@ You can find more inspirations from `PerLisp::Init` and the tests, especially
 ### Some interesting stuff
 
 * Like Haskell, PerLisp fully supports **autocurryfication**, which means a
-function applied to too less arguments will return a function with parameters
+function applied to too few arguments will return a function with parameters
 for the remaining arguments automagically. It's super-easy to define useful
 functions using autocurryfication in combination with some well known higher
 order functions:
